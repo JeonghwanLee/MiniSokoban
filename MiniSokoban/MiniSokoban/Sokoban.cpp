@@ -1,10 +1,10 @@
 #include "Sokoban.h"
 
 Sokoban::Sokoban()
-	: mStart()
-	, mEditor()
-	, mPlay()
-	, mModeType()
+	:   mStart()
+	,	mEditor()
+	,	mPlay()
+	,	mModeType()
 {
 	mStart.SetModeType(&mModeType);
 	mEditor.SetModeType(&mModeType);
@@ -19,20 +19,14 @@ Sokoban::Sokoban()
 		switch (mModeType.GetGameMode())
 		{
 		case START_MODE:
-			mStart.Initialize();
-			mStart.Draw();
-			mStart.WaitForKeyInput();
+			PerformMode(&mStart);
 			break;
 		case EDITOR_MODE:
-			mEditor.Initialize();
-			mEditor.Draw();
-			mEditor.WaitForKeyInput();
+			PerformMode(&mEditor);
 			break;
 		case PLAY_MODE:
 			mPlay.SetFieldMap(mFieldMap->CopyAndReturnThisFieldMap());
-			mPlay.Initialize();
-			mPlay.Draw();
-			mPlay.WaitForKeyInput();
+			PerformMode(&mPlay);
 			break;
 		case EXIT_MODE:
 			std::cout << "Terminating..." << std::endl;
@@ -45,6 +39,13 @@ Sokoban::Sokoban()
 
 Sokoban::~Sokoban()
 {
+}
+
+void Sokoban::PerformMode(GameMode* mode) 
+{
+	mode->Initialize();
+	mode->Draw();
+	mode->WaitForKeyInput();
 }
 
 void Sokoban::SetFieldMapLevel1(FieldMap* fieldMap)
