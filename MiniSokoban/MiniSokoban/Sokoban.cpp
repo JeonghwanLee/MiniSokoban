@@ -1,10 +1,10 @@
 #include "Sokoban.h"
 
 Sokoban::Sokoban()
-	:   mStart()
-	,	mEditor()
-	,	mPlay()
-	,	mModeType()
+	: mStart()
+	, mEditor()
+	, mPlay()
+	, ModeType()
 {
 	mStart.SetModeType(&mModeType);
 	mEditor.SetModeType(&mModeType);
