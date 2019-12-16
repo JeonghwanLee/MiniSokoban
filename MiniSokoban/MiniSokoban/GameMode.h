@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Common.h"
 #include "ModeType.h"
 #include "FieldMap.h"
@@ -17,7 +18,6 @@ public:
 	virtual void Draw() = 0;
 	void Clear();
 
-	void PrintAllColors();
 	bool Key_pressed(int key);
 
 	virtual bool ActionLeft() = 0;

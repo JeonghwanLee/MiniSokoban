@@ -15,12 +15,13 @@ public:
 	~Sokoban();
 
 private:
+	void GetIntoGame(ModeType& modeType);
+	void PerformMode(GameMode* mode);
 	void SetFieldMapLevel1(FieldMap* fieldMap);
 
 	StartMode mStart;
 	EditorMode mEditor;
 	PlayMode mPlay;
-	ModeType mModeType;
 	FieldMap* mFieldMap;
 };
 

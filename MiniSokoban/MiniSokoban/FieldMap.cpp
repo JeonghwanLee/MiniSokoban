@@ -10,7 +10,7 @@ FieldMap::FieldMap()
 		int y = i / MAP_WIDTH;
 		if (x == 0 || x == MAP_WIDTH - 1 || y == 0 || y == MAP_HEIGHT - 1)
 		{
-			mObjectMap[i] = new Object(WALL); // 맵 가장자리는 벽으로 고정
+			mObjectMap[i] = new Object(WALL);
 		}
 		else if (x == 1 && y == 1)
 		{
@@ -38,10 +38,9 @@ FieldMap::~FieldMap()
 	}
 }
 
-FieldMap* FieldMap::CopyAndReturnThisFieldMap()
+FieldMap* FieldMap::CopyAndReturnFieldMap()
 {
 	FieldMap* fieldMap = new FieldMap();
-
 	fieldMap->PutObject(mPlayerX, mPlayerY, PLAYER);
 
 	for (int i = 0; i < MAP_WIDTH * MAP_WIDTH; i++)
@@ -184,7 +183,7 @@ size_t FieldMap::GetMapHeight()
 
 Object* FieldMap::GetObject(int x, int y)
 {
-	return mObjectMap[y*MAP_WIDTH + x];
+	return mObjectMap[y * MAP_WIDTH + x];
 }
 
 bool FieldMap::Push(int xFrom, int yFrom, int xTo, int yTo)
@@ -199,8 +198,8 @@ bool FieldMap::Push(int xFrom, int yFrom, int xTo, int yTo)
 		return false;
 	}
 
-	Object* object = mObjectMap[yFrom*MAP_WIDTH + xFrom];
-	Object* obstacle = mObjectMap[yTo*MAP_WIDTH + xTo];
+	Object* object = mObjectMap[yFrom * MAP_WIDTH + xFrom];
+	Object* obstacle = mObjectMap[yTo * MAP_WIDTH + xTo];
 
 	if (object != nullptr && object->GetObjectType() == PLAYER)
 	{
@@ -256,8 +255,8 @@ bool FieldMap::Push(int xFrom, int yFrom, int xTo, int yTo)
 
 void FieldMap::StandOnTheWayOrGoal(int xFrom, int yFrom, int xTo, int yTo)
 {
-	Object* object = mObjectMap[yFrom*MAP_WIDTH + xFrom];
-	Object* obstacle = mObjectMap[yTo*MAP_WIDTH + xTo];
+	Object* object = mObjectMap[yFrom * MAP_WIDTH + xFrom];
+	Object* obstacle = mObjectMap[yTo * MAP_WIDTH + xTo];
 
 	assert(object != nullptr); // Moving object is always not nullptr.
 	assert(!(object->GetObjectType() == GOAL && !object->hasNext()));
@@ -271,12 +270,12 @@ void FieldMap::StandOnTheWayOrGoal(int xFrom, int yFrom, int xTo, int yTo)
 	}
 	else
 	{
-		mObjectMap[yFrom*MAP_WIDTH + xFrom] = nullptr;
+		mObjectMap[yFrom * MAP_WIDTH + xFrom] = nullptr;
 	}
 
 	if (obstacle == nullptr)
 	{
-		mObjectMap[yTo*MAP_WIDTH + xTo] = object;
+		mObjectMap[yTo * MAP_WIDTH + xTo] = object;
 	}
 	else if (obstacle->GetObjectType() == GOAL)
 	{

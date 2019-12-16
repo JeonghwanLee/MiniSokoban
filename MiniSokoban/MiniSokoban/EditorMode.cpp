@@ -200,12 +200,12 @@ void EditorMode::DrawFieldMap()
 {
 	size_t width = mFieldMap->GetMapWidth();
 	size_t height = mFieldMap->GetMapHeight();
-
+	Object* object;
 	for (unsigned int i = 0; i < height; i++)
 	{
 		for (unsigned int j = 0; j < width; j++)
 		{
-			Object* object = mFieldMap->GetObject(j, i);
+			object = mFieldMap->GetObject(j, i);
 			if (object == nullptr)
 			{
 				SetConsoleTextAttribute(mHConsole, BLACK_WHITE);

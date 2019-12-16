@@ -9,7 +9,7 @@ public:
 	FieldMap();
 	~FieldMap();
 
-	FieldMap* CopyAndReturnThisFieldMap();
+	FieldMap* CopyAndReturnFieldMap();
 	void ResetFieldMapWithWalls();
 
 	void PutObject(int x, int y, EObjectTypes objectType);

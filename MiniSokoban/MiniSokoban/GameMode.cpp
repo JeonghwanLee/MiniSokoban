@@ -4,7 +4,6 @@
 GameMode::GameMode()
 	: mHConsole(GetStdHandle(STD_OUTPUT_HANDLE))
 {
-	mModeType = nullptr;
 }
 
 void GameMode::SetModeType(ModeType* modeType)
@@ -63,7 +62,8 @@ void GameMode::WaitForKeyInput()
 		else if (Key_pressed(VK_ESCAPE))
 		{
 			if (ActionEscape())
-			{
+			{ 
+				system("CLS");
 				return;
 			}
 		}
@@ -115,17 +115,9 @@ void GameMode::WaitForKeyInput()
 
 void GameMode::Clear()
 {
+	COORD origin = { 0, 0 };
+	SetConsoleCursorPosition(mHConsole, origin);
 	SetConsoleTextAttribute(mHConsole, 1);
-	system("CLS");
-}
-
-void GameMode::PrintAllColors()
-{
-	for (int i = 0; i < 255; i++)
-	{
-		SetConsoleTextAttribute(mHConsole, i);
-		std::cout << i << " Hello " << std::endl;
-	}
 }
 
 bool GameMode::Key_pressed(int key)

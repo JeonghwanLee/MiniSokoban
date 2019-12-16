@@ -4,19 +4,29 @@ Sokoban::Sokoban()
 	: mStart()
 	, mEditor()
 	, mPlay()
-	, ModeType()
+	, mFieldMap(new FieldMap())
 {
-	mStart.SetModeType(&mModeType);
-	mEditor.SetModeType(&mModeType);
-	mPlay.SetModeType(&mModeType);
+	ModeType modeType;
+	mStart.SetModeType(&modeType);
+	mEditor.SetModeType(&modeType);
+	mPlay.SetModeType(&modeType);
 
-	mFieldMap = new FieldMap();
 	SetFieldMapLevel1(mFieldMap);
 	mEditor.SetFieldMap(mFieldMap);
 
+	GetIntoGame(modeType);
+}
+
+Sokoban::~Sokoban()
+{
+	delete mFieldMap;
+}
+
+void Sokoban::GetIntoGame(ModeType& modeType) 
+{
 	while (true)
 	{
-		switch (mModeType.GetGameMode())
+		switch (modeType.GetGameMode())
 		{
 		case START_MODE:
 			PerformMode(&mStart);
@@ -25,20 +35,16 @@ Sokoban::Sokoban()
 			PerformMode(&mEditor);
 			break;
 		case PLAY_MODE:
-			mPlay.SetFieldMap(mFieldMap->CopyAndReturnThisFieldMap());
+			mPlay.SetFieldMap(mFieldMap->CopyAndReturnFieldMap());
 			PerformMode(&mPlay);
 			break;
 		case EXIT_MODE:
-			std::cout << "Terminating..." << std::endl;
+			std::cout << "Terminating Game..." << std::endl;
 			return;
 		default:
 			break;
 		}
 	}
-}
-
-Sokoban::~Sokoban()
-{
 }
 
 void Sokoban::PerformMode(GameMode* mode) 
