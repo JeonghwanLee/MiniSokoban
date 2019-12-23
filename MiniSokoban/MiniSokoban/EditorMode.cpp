@@ -19,12 +19,11 @@ void EditorMode::Draw()
 	std::cout << std::endl;
 	DrawObjectDescription();
 	std::cout << std::endl;
+	std::cout << "ENTER: Set Selected Object	";
 	std::cout << "SPACE: Reset Field" << std::endl;
 	std::cout << std::endl;
 	SetConsoleTextAttribute(mHConsole, BLACK_GREEN);
-	std::cout << "Editor" << std::endl;
-	std::cout << "ESC: Start Menu" << std::endl;
-	std::cout << std::endl;
+	std::cout << "ESC: Back to Start Menu" << std::endl;
 }
 
 bool EditorMode::ActionLeft()
@@ -201,11 +200,13 @@ void EditorMode::DrawFieldMap()
 	size_t width = mFieldMap->GetMapWidth();
 	size_t height = mFieldMap->GetMapHeight();
 	Object* object;
+
 	for (unsigned int i = 0; i < height; i++)
 	{
 		for (unsigned int j = 0; j < width; j++)
 		{
 			object = mFieldMap->GetObject(j, i);
+
 			if (object == nullptr)
 			{
 				SetConsoleTextAttribute(mHConsole, BLACK_WHITE);

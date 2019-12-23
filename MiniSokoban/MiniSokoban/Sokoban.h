@@ -14,14 +14,13 @@ public:
 	Sokoban(const Sokoban& other) = delete;
 	~Sokoban();
 
-private:
-	void GetIntoGame(ModeType& modeType);
-	void PerformMode(GameMode* mode);
-	void SetFieldMapLevel1(FieldMap* fieldMap);
+	void PlayGame();
 
-	StartMode mStart;
-	EditorMode mEditor;
-	PlayMode mPlay;
+private:
+	void PerformMode(GameMode* mode);
+
+	ModeType mModeType;
+	GameMode* mGameMode;
 	FieldMap* mFieldMap;
 };
 

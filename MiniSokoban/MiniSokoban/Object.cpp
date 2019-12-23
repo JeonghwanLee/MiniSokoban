@@ -2,13 +2,12 @@
 
 Object::Object(EObjectTypes objectType)
 	: mObjectType(objectType)
+	,mNext(nullptr)
 {
-	mNext = nullptr;
 }
 
 Object::~Object()
 {
-
 }
 
 bool Object::hasNext()

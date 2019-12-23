@@ -47,11 +47,9 @@ void PlayMode::Draw()
 	DrawFieldMap();
 	std::cout << std::endl;
 	DrawObjectDescription();
-	std::cout << std::endl;
 	SetConsoleTextAttribute(mHConsole, BLACK_GREEN);
-	std::cout << "Play" << std::endl;
-	std::cout << "ESC: Start Menu" << std::endl;
 	std::cout << std::endl;
+	std::cout << "ESC: Back to Start Menu" << std::endl;
 	if (bStageClearFlag)
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
