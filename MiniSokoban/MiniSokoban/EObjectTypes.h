@@ -1,6 +1,6 @@
 #pragma once
 
-enum EObjectTypes
+enum class EObjectTypes
 {
 	PLAYER,
 	WALL,

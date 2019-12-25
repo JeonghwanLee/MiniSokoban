@@ -1,7 +1,7 @@
 #include "ModeType.h"
 
 ModeType::ModeType()
-	: mMode(START_MODE)
+	: mMode(EModeTypes::START_MODE)
 {
 }
 
@@ -11,22 +11,22 @@ ModeType::~ModeType()
 
 void ModeType::SetStartMode()
 {
-	mMode = START_MODE;
+	mMode = EModeTypes::START_MODE;
 }
 
 void ModeType::SetEditorMode()
 {
-	mMode = EDITOR_MODE;
+	mMode = EModeTypes::EDITOR_MODE;
 }
 
 void ModeType::SetPlayMode()
 {
-	mMode = PLAY_MODE;
+	mMode = EModeTypes::PLAY_MODE;
 }
 
 void ModeType::SetExitMode()
 {
-	mMode = EXIT_MODE;
+	mMode = EModeTypes::EXIT_MODE;
 }
 
 EModeTypes ModeType::GetGameMode()

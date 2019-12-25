@@ -19,11 +19,12 @@ public:
 	virtual bool ActionEscape() override;
 	virtual bool ActionSpace() override;
 
-	virtual bool ActionNum1() override;
-	virtual bool ActionNum2() override;
-	virtual bool ActionNum3() override;
-	virtual bool ActionNum4() override;
-	virtual bool ActionNum5() override;
+	virtual bool ActionNum(int mode) override;
+	virtual bool ActionPlayer() override;
+	virtual bool ActionBox() override;
+	virtual bool ActionWall() override;
+	virtual bool ActionGoal() override;
+	virtual bool ActionWay() override;
 
 	virtual void Initialize() override;
 

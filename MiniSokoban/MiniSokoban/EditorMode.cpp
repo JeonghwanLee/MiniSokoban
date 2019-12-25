@@ -2,7 +2,7 @@
 #include "Object.h"
 
 EditorMode::EditorMode()
-	: mPutObjectType(WAY)
+	: mPutObjectType(EObjectTypes::BOX)
 	, mCursorX(0)
 	, mCursorY(0)
 {
@@ -15,15 +15,14 @@ EditorMode::~EditorMode()
 void EditorMode::Draw()
 {
 	Clear();
-	DrawFieldMap();
-	std::cout << std::endl;
-	DrawObjectDescription();
-	std::cout << std::endl;
-	std::cout << "ENTER: Set Selected Object	";
-	std::cout << "SPACE: Reset Field" << std::endl;
-	std::cout << std::endl;
-	SetConsoleTextAttribute(mHConsole, BLACK_GREEN);
-	std::cout << "ESC: Back to Start Menu" << std::endl;
+	if (mFieldMap == nullptr)
+	{
+		DrawSelectLevel();
+	}
+	else 
+	{
+		DrawSelectedLevelMap();
+	}
 }
 
 bool EditorMode::ActionLeft()
@@ -86,37 +85,45 @@ bool EditorMode::ActionSpace()
 	return false;
 }
 
-bool EditorMode::ActionNum1()
+bool EditorMode::ActionNum(int level)
 {
-	mPutObjectType = PLAYER;
+	mFieldMap = &mFieldMaps[level - 1];
+	system("CLS");
 	Draw();
 	return false;
 }
 
-bool EditorMode::ActionNum2()
+bool EditorMode::ActionPlayer()
 {
-	mPutObjectType = BOX;
+	mPutObjectType = EObjectTypes::PLAYER;
 	Draw();
 	return false;
 }
 
-bool EditorMode::ActionNum3()
+bool EditorMode::ActionBox()
 {
-	mPutObjectType = WALL;
+	mPutObjectType = EObjectTypes::BOX;
 	Draw();
 	return false;
 }
 
-bool EditorMode::ActionNum4()
+bool EditorMode::ActionWall()
 {
-	mPutObjectType = GOAL;
+	mPutObjectType = EObjectTypes::WALL;
 	Draw();
 	return false;
 }
 
-bool EditorMode::ActionNum5()
+bool EditorMode::ActionGoal()
 {
-	mPutObjectType = WAY;
+	mPutObjectType = EObjectTypes::GOAL;
+	Draw();
+	return false;
+}
+
+bool EditorMode::ActionWay()
+{
+	mPutObjectType = EObjectTypes::WAY;
 	Draw();
 	return false;
 }
@@ -130,11 +137,30 @@ void EditorMode::ResetFieldMap()
 	mFieldMap->ResetFieldMapWithWalls();
 }
 
+void EditorMode::DrawSelectLevel()
+{
+	SetConsoleTextAttribute(mHConsole, BLACK_GREEN);
+	std::cout << "Select level of field map you want to edit between 1 and 6." << std::endl;
+}
+
+void EditorMode::DrawSelectedLevelMap()
+{
+	DrawFieldMap();
+	std::cout << std::endl;
+	DrawObjectDescription();
+	SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
+	std::cout << std::endl;
+	std::cout << "Press one of the above keys to select object type to set." << std::endl;
+	std::cout << std::endl;
+	SetConsoleTextAttribute(mHConsole, BLACK_GREEN);
+	std::cout << "ENTER: Set Selected Object    SPACE: Reset Field    ESC: Back to Start Menu" << std::endl;
+}
+
 void EditorMode::DrawObjectDescription()
 {
 	SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
 	std::cout << "  ";
-	if (mPutObjectType == PLAYER)
+	if (mPutObjectType == EObjectTypes::PLAYER)
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
 	}
@@ -142,11 +168,11 @@ void EditorMode::DrawObjectDescription()
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
 	}
-	std::cout << " 1: Player ";
+	std::cout << " Player: p  ";
 
 	SetConsoleTextAttribute(mHConsole, RED_WHITE);
 	std::cout << "  ";
-	if (mPutObjectType == BOX)
+	if (mPutObjectType == EObjectTypes::BOX)
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
 	}
@@ -154,11 +180,11 @@ void EditorMode::DrawObjectDescription()
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
 	}
-	std::cout << " 2: Box ";
+	std::cout << " Box: b  ";
 
 	SetConsoleTextAttribute(mHConsole, WHITE_BLACK);
 	std::cout << "  ";
-	if (mPutObjectType == WALL)
+	if (mPutObjectType == EObjectTypes::WALL)
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
 	}
@@ -166,11 +192,11 @@ void EditorMode::DrawObjectDescription()
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
 	}
-	std::cout << " 3: Wall ";
+	std::cout << " Wall: w  ";
 
 	SetConsoleTextAttribute(mHConsole, YELLOW_WHITE);
 	std::cout << "  ";
-	if (mPutObjectType == GOAL)
+	if (mPutObjectType == EObjectTypes::GOAL)
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
 	}
@@ -178,11 +204,11 @@ void EditorMode::DrawObjectDescription()
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
 	}
-	std::cout << " 4: Goal ";
+	std::cout << " Goal: g  ";
 
 	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
 	std::cout << "  ";
-	if (mPutObjectType == WAY)
+	if (mPutObjectType == EObjectTypes::WAY)
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
 	}
@@ -190,7 +216,7 @@ void EditorMode::DrawObjectDescription()
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
 	}
-	std::cout << " 5: Way ";
+	std::cout << " Way: y  ";
 
 	std::cout << std::endl;
 }
@@ -211,27 +237,27 @@ void EditorMode::DrawFieldMap()
 			{
 				SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
 			}
-			else if (object->GetObjectType() == PLAYER)
+			else if (object->GetObjectType() == EObjectTypes::PLAYER)
 			{
 				SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
 			}
-			else if (object->GetObjectType() == BOX)
+			else if (object->GetObjectType() == EObjectTypes::BOX)
 			{
 				SetConsoleTextAttribute(mHConsole, RED_WHITE);
 			}
-			else if (object->GetObjectType() == WALL)
+			else if (object->GetObjectType() == EObjectTypes::WALL)
 			{
 				SetConsoleTextAttribute(mHConsole, WHITE_BLACK);
 			}
-			else if (object->GetObjectType() == GOAL)
+			else if (object->GetObjectType() == EObjectTypes::GOAL)
 			{
 				if (object->hasNext())
 				{
-					if (object->GetNextObject()->GetObjectType() == PLAYER)
+					if (object->GetNextObject()->GetObjectType() == EObjectTypes::PLAYER)
 					{
 						SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
 					}
-					else if (object->GetNextObject()->GetObjectType() == BOX)
+					else if (object->GetNextObject()->GetObjectType() == EObjectTypes::BOX)
 					{
 						SetConsoleTextAttribute(mHConsole, RED_WHITE);
 					}

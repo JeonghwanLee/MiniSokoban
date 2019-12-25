@@ -1,8 +1,9 @@
 #include "PlayMode.h"
 #include "Object.h"
 
-PlayMode::PlayMode()
-	: bStageClearFlag(false)
+PlayMode::PlayMode(size_t& currentLevel)
+	: mLevel(currentLevel)
+	, bStageClearFlag(false)
 {
 }
 
@@ -24,13 +25,13 @@ void PlayMode::CheckStageClear()
 			{
 				continue;
 			}
-			else if (object->GetObjectType() == GOAL)
+			else if (object->GetObjectType() == EObjectTypes::GOAL)
 			{
 				if (!object->hasNext())
 				{
 					return;
 				}
-				else if (object->GetNextObject()->GetObjectType() != BOX)
+				else if (object->GetNextObject()->GetObjectType() != EObjectTypes::BOX)
 				{
 					return;
 				}
@@ -53,9 +54,10 @@ void PlayMode::Draw()
 	if (bStageClearFlag)
 	{
 		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
-		std::cout << "**********" << std::endl;
-		std::cout << "You Win!" << std::endl;
-		std::cout << "**********" << std::endl;
+		std::cout << std::endl;
+		std::cout << "*********************************************" << std::endl;
+		std::cout << "  You Win! Press ESC to back to Start Menu.  " << std::endl;
+		std::cout << "*********************************************" << std::endl;
 	}
 }
 
@@ -123,27 +125,32 @@ bool PlayMode::ActionSpace()
 	return false;
 }
 
-bool PlayMode::ActionNum1()
+bool PlayMode::ActionNum(int level)
 {
 	return false;
 }
 
-bool PlayMode::ActionNum2()
+bool PlayMode::ActionPlayer()
 {
 	return false;
 }
 
-bool PlayMode::ActionNum3()
+bool PlayMode::ActionBox()
 {
 	return false;
 }
 
-bool PlayMode::ActionNum4()
+bool PlayMode::ActionWall()
 {
 	return false;
 }
 
-bool PlayMode::ActionNum5()
+bool PlayMode::ActionGoal()
+{
+	return false;
+}
+
+bool PlayMode::ActionWay()
 {
 	return false;
 }
@@ -153,27 +160,27 @@ void PlayMode::DrawObjectDescription()
 	SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
 	std::cout << "  ";
 	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	std::cout << " 1: Player ";
+	std::cout << " Player  ";
 
 	SetConsoleTextAttribute(mHConsole, RED_WHITE);
 	std::cout << "  ";
 	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	std::cout << " 2: Box ";
+	std::cout << " Box  ";
 
 	SetConsoleTextAttribute(mHConsole, WHITE_BLACK);
 	std::cout << "  ";
 	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	std::cout << " 3: Wall ";
+	std::cout << " Wall  ";
 
 	SetConsoleTextAttribute(mHConsole, YELLOW_WHITE);
 	std::cout << "  ";
 	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	std::cout << " 4: Goal ";
+	std::cout << " Goal  ";
 
 	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
 	std::cout << "  ";
 	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	std::cout << " 5: Way ";
+	std::cout << " Way ";
 
 	std::cout << std::endl;
 }
@@ -194,27 +201,27 @@ void PlayMode::DrawFieldMap()
 			{
 				SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
 			}
-			else if (object->GetObjectType() == PLAYER)
+			else if (object->GetObjectType() == EObjectTypes::PLAYER)
 			{
 				SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
 			}
-			else if (object->GetObjectType() == BOX)
+			else if (object->GetObjectType() == EObjectTypes::BOX)
 			{
 				SetConsoleTextAttribute(mHConsole, RED_WHITE);
 			}
-			else if (object->GetObjectType() == WALL)
+			else if (object->GetObjectType() == EObjectTypes::WALL)
 			{
 				SetConsoleTextAttribute(mHConsole, WHITE_BLACK);
 			}
-			else if (object->GetObjectType() == GOAL)
+			else if (object->GetObjectType() == EObjectTypes::GOAL)
 			{
 				if (object->hasNext())
 				{
-					if (object->GetNextObject()->GetObjectType() == PLAYER)
+					if (object->GetNextObject()->GetObjectType() == EObjectTypes::PLAYER)
 					{
 						SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
 					}
-					else if (object->GetNextObject()->GetObjectType() == BOX)
+					else if (object->GetNextObject()->GetObjectType() == EObjectTypes::BOX)
 					{
 						SetConsoleTextAttribute(mHConsole, RED_WHITE);
 					}
@@ -233,4 +240,5 @@ void PlayMode::DrawFieldMap()
 void PlayMode::Initialize()
 {
 	bStageClearFlag = false;
+	mFieldMap = mFieldMaps[mLevel - 1].CreateCopiedFieldMap();
 }

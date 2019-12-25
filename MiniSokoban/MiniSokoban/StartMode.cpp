@@ -54,30 +54,47 @@ bool StartMode::ActionSpace()
 	return false;
 }
 
-bool StartMode::ActionNum1()
+bool StartMode::ActionNum(int mode)
 {
-	mModeType->SetEditorMode();
-	return true;
+	if (mode == 1) 
+	{
+		mModeType->SetEditorMode();
+		return true;
+	}
+	else if (mode == 2)
+	{
+		mModeType->SetPlayMode();
+		return true;
+	} 
+	else if (mode == 3)
+	{
+		mModeType->SetExitMode();
+		return true;
+	}
+	return false;
 }
 
-bool StartMode::ActionNum2()
-{
-	mModeType->SetPlayMode();
-	return true;
-}
-
-bool StartMode::ActionNum3()
-{
-	mModeType->SetExitMode();
-	return true;
-}
-
-bool StartMode::ActionNum4()
+bool StartMode::ActionPlayer()
 {
 	return false;
 }
 
-bool StartMode::ActionNum5()
+bool StartMode::ActionBox()
+{
+	return false;
+}
+
+bool StartMode::ActionWall()
+{
+	return false;
+}
+
+bool StartMode::ActionGoal()
+{
+	return false;
+}
+
+bool StartMode::ActionWay()
 {
 	return false;
 }

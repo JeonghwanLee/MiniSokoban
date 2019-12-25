@@ -1,6 +1,6 @@
 #pragma once
 
-enum EModeTypes
+enum class EModeTypes
 {
 	START_MODE,
 	EDITOR_MODE,
