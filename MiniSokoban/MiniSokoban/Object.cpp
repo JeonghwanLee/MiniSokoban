@@ -2,7 +2,7 @@
 
 Object::Object(EObjectTypes objectType)
 	: mObjectType(objectType)
-	, mNext(nullptr)
+	, mObjectOnGoal(nullptr)
 {
 }
 
@@ -10,9 +10,9 @@ Object::~Object()
 {
 }
 
-bool Object::hasNext()
+bool Object::hasObjectOnGoal()
 {
-	if (mNext != nullptr)
+	if (mObjectOnGoal != nullptr)
 	{
 		return true;
 	}
@@ -29,12 +29,12 @@ EObjectTypes Object::GetObjectType()
 	return mObjectType;
 }
 
-void Object::SetNextObject(Object * nextObject)
+void Object::SetObjectOnGoal(Object * objectOnGoal)
 {
-	mNext = nextObject;
+	mObjectOnGoal = objectOnGoal;
 }
 
-Object* Object::GetNextObject()
+Object* Object::GetObjectOnGoal()
 {
-	return mNext;
+	return mObjectOnGoal;
 }

@@ -1,3 +1,11 @@
-﻿  FieldMap.cpp
-C:\Users\Jeonghwan Lee\Downloads\dev\MiniSokoban\MiniSokoban\MiniSokoban\FieldMap.cpp(97,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+﻿  EditorMode.cpp
+  FieldMap.cpp
+C:\Users\Jeonghwan Lee\Downloads\dev\MiniSokoban\MiniSokoban\MiniSokoban\FieldMap.cpp(102,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+  GameMode.cpp
+  PlayMode.cpp
+  Sokoban.cpp
+  StartMode.cpp
+  main.cpp
+  Generating Code...
+C:\Users\Jeonghwan Lee\Downloads\dev\MiniSokoban\MiniSokoban\MiniSokoban\FieldMap.cpp(271): warning C4715: 'FieldMap::IsPushable': not all control paths return a value
   MiniSokoban.vcxproj -> C:\Users\Jeonghwan Lee\Downloads\dev\MiniSokoban\MiniSokoban\x64\Debug\MiniSokoban.exe

@@ -8,15 +8,15 @@ public:
 	Object(EObjectTypes objectType);
 	~Object();
 
-	bool hasNext();
+	bool hasObjectOnGoal();
 
 	void SetObjectType(EObjectTypes objectType);
 	EObjectTypes GetObjectType();
 
-	void SetNextObject(Object* nextObject);
-	Object* GetNextObject();
+	void SetObjectOnGoal(Object* nextObject);
+	Object* GetObjectOnGoal();
 
 private:
 	EObjectTypes mObjectType;
-	Object* mNext;
+	Object* mObjectOnGoal;
 };

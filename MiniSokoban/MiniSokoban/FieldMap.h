@@ -7,9 +7,8 @@ class FieldMap
 {
 public:
 	FieldMap();
+	FieldMap(const FieldMap& other);
 	~FieldMap();
-
-	FieldMap* CreateCopiedFieldMap();
 
 	void ResetFieldMapWithWalls();
 	void SetUpFieldMapByLevel(size_t level);
@@ -27,7 +26,7 @@ public:
 private:
 	// yFrom increases as it goes to downwards
 	bool IsPushable(int xFrom, int yFrom, int xTo, int yTo);
-	void StandOnWayOrGoal(int xFrom, int yFrom, int xTo, int yTo);
+	void MoveObjectFromTo(int xFrom, int yFrom, int xTo, int yTo);
 
 	void SetFieldMapLevel1();
 	void SetFieldMapLevel2();
@@ -40,4 +39,5 @@ private:
 	Object* mPlayer;
 	unsigned int mPlayerX;
 	unsigned int mPlayerY;
+	bool bMoveNextObject;
 };

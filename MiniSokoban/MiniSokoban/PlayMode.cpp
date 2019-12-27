@@ -27,11 +27,11 @@ void PlayMode::CheckStageClear()
 			}
 			else if (object->GetObjectType() == EObjectTypes::GOAL)
 			{
-				if (!object->hasNext())
+				if (!object->hasObjectOnGoal())
 				{
 					return;
 				}
-				else if (object->GetNextObject()->GetObjectType() != EObjectTypes::BOX)
+				else if (object->GetObjectOnGoal()->GetObjectType() != EObjectTypes::BOX)
 				{
 					return;
 				}
@@ -212,13 +212,13 @@ void PlayMode::DrawFieldMap()
 			}
 			else if (object->GetObjectType() == EObjectTypes::GOAL)
 			{
-				if (object->hasNext())
+				if (object->hasObjectOnGoal())
 				{
-					if (object->GetNextObject()->GetObjectType() == EObjectTypes::PLAYER)
+					if (object->GetObjectOnGoal()->GetObjectType() == EObjectTypes::PLAYER)
 					{
 						SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
 					}
-					else if (object->GetNextObject()->GetObjectType() == EObjectTypes::BOX)
+					else if (object->GetObjectOnGoal()->GetObjectType() == EObjectTypes::BOX)
 					{
 						SetConsoleTextAttribute(mHConsole, RED_WHITE);
 					}
@@ -237,5 +237,5 @@ void PlayMode::DrawFieldMap()
 void PlayMode::Initialize()
 {
 	bStageClearFlag = false;
-	mFieldMap = mFieldMaps[mLevel - 1].CreateCopiedFieldMap();
+	mFieldMap = new FieldMap(mFieldMaps[mLevel - 1]);
 }

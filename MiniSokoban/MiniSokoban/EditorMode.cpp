@@ -206,7 +206,7 @@ void EditorMode::DrawObjectDescription()
 	}
 	std::cout << " Goal: g  ";
 
-	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
+	SetConsoleTextAttribute(mHConsole, BLACK_PURPLE);
 	std::cout << "  ";
 	if (mPutObjectType == EObjectTypes::WAY)
 	{
@@ -248,13 +248,13 @@ void EditorMode::DrawFieldMap()
 			}
 			else if (object->GetObjectType() == EObjectTypes::GOAL)
 			{
-				if (object->hasNext())
+				if (object->hasObjectOnGoal())
 				{
-					if (object->GetNextObject()->GetObjectType() == EObjectTypes::PLAYER)
+					if (object->GetObjectOnGoal()->GetObjectType() == EObjectTypes::PLAYER)
 					{
 						SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
 					}
-					else if (object->GetNextObject()->GetObjectType() == EObjectTypes::BOX)
+					else if (object->GetObjectOnGoal()->GetObjectType() == EObjectTypes::BOX)
 					{
 						SetConsoleTextAttribute(mHConsole, RED_WHITE);
 					}
