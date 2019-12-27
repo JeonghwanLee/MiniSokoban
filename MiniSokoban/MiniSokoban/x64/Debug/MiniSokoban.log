@@ -1,2 +1,3 @@
-﻿  PlayMode.cpp
+﻿  FieldMap.cpp
+C:\Users\Jeonghwan Lee\Downloads\dev\MiniSokoban\MiniSokoban\MiniSokoban\FieldMap.cpp(97,3): warning C4002: too many arguments for function-like macro invocation 'assert'
   MiniSokoban.vcxproj -> C:\Users\Jeonghwan Lee\Downloads\dev\MiniSokoban\MiniSokoban\x64\Debug\MiniSokoban.exe

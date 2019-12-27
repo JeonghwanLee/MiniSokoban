@@ -16,14 +16,14 @@ public:
 
 	void PlayGame();
 
-	enum { MAX_SIZE = 6 };
+	enum { MAX_LEVEL = 6 };
 
 private:
-	void PerformMode(GameMode* mode);
+	void PerformMode();
 
 	ModeType mModeType;
 	GameMode* mGameMode;
-	FieldMap mFieldMaps[MAX_SIZE];
+	FieldMap mFieldMaps[MAX_LEVEL];
 	size_t mLevel;
 };
 

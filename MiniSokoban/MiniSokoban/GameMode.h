@@ -17,7 +17,6 @@ public:
 	void WaitForKeyInput();
 	void Clear();
 	bool IsKeyPressed(int key);
-
 	virtual void Initialize() = 0;
 	virtual void Draw() = 0;
 

@@ -13,12 +13,12 @@ PlayMode::~PlayMode()
 
 void PlayMode::CheckStageClear()
 {
-	size_t width = mFieldMap->GetMapWidth();
-	size_t height = mFieldMap->GetMapHeight();
+	assert(FieldMap::MAP_WIDTH == 20);
+	assert(FieldMap::MAP_HEIGHT == 20);
 
-	for (unsigned int i = 0; i < height; i++)
+	for (unsigned int i = 0; i < FieldMap::MAP_HEIGHT; i++)
 	{
-		for (unsigned int j = 0; j < width; j++)
+		for (unsigned int j = 0; j < FieldMap::MAP_WIDTH; j++)
 		{
 			Object* object = mFieldMap->GetObject(j, i);
 			if (object == nullptr)
@@ -187,13 +187,10 @@ void PlayMode::DrawObjectDescription()
 
 void PlayMode::DrawFieldMap()
 {
-	size_t width = mFieldMap->GetMapWidth();
-	size_t height = mFieldMap->GetMapHeight();
 	Object* object;
-
-	for (unsigned int i = 0; i < height; i++)
+	for (unsigned int i = 0; i < FieldMap::MAP_HEIGHT; i++)
 	{
-		for (unsigned int j = 0; j < width; j++)
+		for (unsigned int j = 0; j < FieldMap::MAP_WIDTH; j++)
 		{
 			object = mFieldMap->GetObject(j, i);
 

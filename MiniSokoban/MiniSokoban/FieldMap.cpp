@@ -8,11 +8,12 @@ FieldMap::FieldMap()
 	, mPlayerY(1)
 {
 	int x, y;
-	for (int i = 0; i < MAP_WIDTH * MAP_WIDTH; i++)
+	for (int i = 0; i < FieldMap::MAP_WIDTH * FieldMap::MAP_WIDTH; i++)
 	{
-		x = i % MAP_WIDTH;
-		y = i / MAP_WIDTH;
-		if (x == 0 || x == MAP_WIDTH - 1 || y == 0 || y == MAP_HEIGHT - 1)
+		x = i % FieldMap::MAP_WIDTH;
+		y = i / FieldMap::MAP_WIDTH;
+
+		if (x == 0 || x == FieldMap::MAP_WIDTH - 1 || y == 0 || y == FieldMap::MAP_HEIGHT - 1)
 		{
 			mObjectMap[i] = new Object(EObjectTypes::WALL);
 		}
@@ -30,7 +31,7 @@ FieldMap::FieldMap()
 
 FieldMap::~FieldMap()
 {
-	for (int i = 0; i < MAP_WIDTH * MAP_WIDTH; i++)
+	for (int i = 0; i < FieldMap::MAP_WIDTH * FieldMap::MAP_WIDTH; i++)
 	{
 		if (mObjectMap[i] != nullptr)
 		{
@@ -46,12 +47,12 @@ FieldMap* FieldMap::CreateCopiedFieldMap()
 	int x, y;
 	fieldMap->PutObject(mPlayerX, mPlayerY, EObjectTypes::PLAYER);
 
-	for (int i = 0; i < MAP_WIDTH * MAP_WIDTH; i++)
+	for (int i = 0; i < FieldMap::MAP_WIDTH * FieldMap::MAP_WIDTH; i++)
 	{
-		x = i % MAP_WIDTH;
-		y = i / MAP_WIDTH;
+		x = i % FieldMap::MAP_WIDTH;
+		y = i / FieldMap::MAP_WIDTH;
 
-		if (x > 0 && x < MAP_WIDTH - 1 && y > 0 && y < MAP_HEIGHT - 1)
+		if (x > 0 && x < FieldMap::MAP_WIDTH - 1 && y > 0 && y < FieldMap::MAP_HEIGHT - 1)
 		{
 			object = mObjectMap[i];
 			if (object != nullptr && object->GetObjectType() != EObjectTypes::PLAYER) {
@@ -59,26 +60,24 @@ FieldMap* FieldMap::CreateCopiedFieldMap()
 			}
 		}
 	}
+
 	return fieldMap;
 }
 
 void FieldMap::ResetFieldMapWithWalls()
 {
-	size_t width = GetMapWidth();
-	size_t height = GetMapHeight();
-
-	for (unsigned int i = 0; i < height; i++)
+	for (unsigned int i = 0; i < FieldMap::MAP_HEIGHT; i++)
 	{
-		for (unsigned int j = 0; j < width; j++)
+		for (unsigned int j = 0; j < FieldMap::MAP_WIDTH; j++)
 		{
 			PutObject(j, i, EObjectTypes::WALL);
 		}
 	}
 }
 
-void FieldMap::SetUpFieldMapLevels(size_t level)
+void FieldMap::SetUpFieldMapByLevel(size_t level)
 {
-	switch (++level) 
+	switch (level) 
 	{
 	case 1:
 		SetFieldMapLevel1();
@@ -106,16 +105,16 @@ void FieldMap::SetUpFieldMapLevels(size_t level)
 
 void FieldMap::PutObject(int x, int y, EObjectTypes objectType)
 {
-	if (x < 0 || x > MAP_WIDTH - 1 || y < 0 || y > MAP_HEIGHT - 1)
+	if (x < 0 || x > FieldMap::MAP_WIDTH - 1 || y < 0 || y > FieldMap::MAP_HEIGHT - 1)
 	{
 		assert(false); // Out of FieldMap
 	}
-	if (x == 0 || x == MAP_WIDTH - 1 || y == 0 || y == MAP_HEIGHT - 1)
+	if (x == 0 || x == FieldMap::MAP_WIDTH - 1 || y == 0 || y == FieldMap::MAP_HEIGHT - 1)
 	{
 		return; // Each edge of FieldMap is Wall
 	}
 
-	int gridIndex = y * MAP_WIDTH + x;
+	int gridIndex = y * FieldMap::MAP_WIDTH + x;
 	if (mObjectMap[gridIndex] != nullptr)
 	{
 		// Execute nothing when there is the same object in the spot and Not allowed to delete Player.
@@ -133,7 +132,7 @@ void FieldMap::PutObject(int x, int y, EObjectTypes objectType)
 	{
 		// A single Player must exist.
 		mObjectMap[gridIndex] = mPlayer;
-		mObjectMap[mPlayerY * MAP_WIDTH + mPlayerX] = nullptr;
+		mObjectMap[mPlayerY * FieldMap::MAP_WIDTH + mPlayerX] = nullptr;
 		mPlayerX = x;
 		mPlayerY = y;
 	}
@@ -150,7 +149,7 @@ void FieldMap::MovePlayerLeft()
 {
 	if (IsPushable(mPlayerX - 1, mPlayerY, mPlayerX - 2, mPlayerY))
 	{
-		StandOnTheWayOrGoal(mPlayerX, mPlayerY, mPlayerX - 1, mPlayerY);
+		StandOnWayOrGoal(mPlayerX, mPlayerY, mPlayerX - 1, mPlayerY);
 		mPlayerX--;
 	}
 }
@@ -159,7 +158,7 @@ void FieldMap::MovePlayerRight()
 {
 	if (IsPushable(mPlayerX + 1, mPlayerY, mPlayerX + 2, mPlayerY))
 	{
-		StandOnTheWayOrGoal(mPlayerX, mPlayerY, mPlayerX + 1, mPlayerY);
+		StandOnWayOrGoal(mPlayerX, mPlayerY, mPlayerX + 1, mPlayerY);
 		mPlayerX++;
 	}
 }
@@ -168,7 +167,7 @@ void FieldMap::MovePlayerUp()
 {
 	if (IsPushable(mPlayerX, mPlayerY - 1, mPlayerX, mPlayerY - 2))
 	{
-		StandOnTheWayOrGoal(mPlayerX, mPlayerY, mPlayerX, mPlayerY - 1);
+		StandOnWayOrGoal(mPlayerX, mPlayerY, mPlayerX, mPlayerY - 1);
 		mPlayerY--;
 	}
 }
@@ -177,56 +176,50 @@ void FieldMap::MovePlayerDown()
 {
 	if (IsPushable(mPlayerX, mPlayerY + 1, mPlayerX, mPlayerY + 2))
 	{
-		StandOnTheWayOrGoal(mPlayerX, mPlayerY, mPlayerX, mPlayerY + 1);
+		StandOnWayOrGoal(mPlayerX, mPlayerY, mPlayerX, mPlayerY + 1);
 		mPlayerY++;
 	}
 }
 
-size_t FieldMap::GetMapWidth()
-{
-	return MAP_WIDTH;
-}
-
-size_t FieldMap::GetMapHeight()
-{
-	return MAP_HEIGHT;
-}
-
 Object* FieldMap::GetObject(int x, int y)
 {
-	return mObjectMap[y * MAP_WIDTH + x];
+	return mObjectMap[y * FieldMap::MAP_WIDTH + x];
 }
 
 bool FieldMap::IsPushable(int xFrom, int yFrom, int xTo, int yTo)
 {
-	// Return true when the object is pushed or there is no object to push. 
-	if (xFrom < 0 || xFrom > MAP_WIDTH - 1 || yFrom < 0 || yFrom > MAP_HEIGHT - 1)
+	if (xFrom < 0 || xFrom > FieldMap::MAP_WIDTH - 1 || yFrom < 0 || yFrom > FieldMap::MAP_HEIGHT - 1)
 	{
-		assert(false); // Impossible that object is out of map.
+		assert(false);
 	}
-	if (xTo < 0 || xTo > MAP_WIDTH - 1 || yTo < 0 || yTo > MAP_HEIGHT - 1)
+
+	if (xTo < 0 || xTo > FieldMap::MAP_WIDTH - 1 || yTo < 0 || yTo > FieldMap::MAP_HEIGHT - 1)
 	{
 		return false;
 	}
 
-	Object* next = mObjectMap[yFrom * MAP_WIDTH + xFrom];
-	Object* nextToNext = mObjectMap[yTo * MAP_WIDTH + xTo];
+	Object* next = mObjectMap[yFrom * FieldMap::MAP_WIDTH + xFrom];
+	Object* nextToNext = mObjectMap[yTo * FieldMap::MAP_WIDTH + xTo];
+	EObjectTypes nextObjectType = next->GetObjectType();
+	EObjectTypes nextToNextObjectType = nextToNext->GetObjectType();
 
-	if (next != nullptr && next->GetObjectType() == EObjectTypes::PLAYER)
+	if (next != nullptr && nextObjectType == EObjectTypes::PLAYER)
 	{
-		assert(false); // Impossible to push Player.
+		assert(false); 
 	}
+
 	if (next == nullptr)
 	{
-		return true; // Return true when there is nothing to push.
+		// WAY is next to PLAYER
+		return true;
 	}
 	else
 	{
-		if (next->GetObjectType() == EObjectTypes::BOX)
+		if (nextObjectType == EObjectTypes::BOX)
 		{
-			if (nextToNext == nullptr || nextToNext->GetObjectType() == EObjectTypes::GOAL)
+			if (nextToNext == nullptr || nextToNextObjectType == EObjectTypes::GOAL)
 			{
-				StandOnTheWayOrGoal(xFrom, yFrom, xTo, yTo);
+				StandOnWayOrGoal(xFrom, yFrom, xTo, yTo); // PLAYER BOX WAY or PLAYER BOX GOAL
 				return true;
 			}
 			else
@@ -234,11 +227,11 @@ bool FieldMap::IsPushable(int xFrom, int yFrom, int xTo, int yTo)
 				return false;
 			}
 		}
-		else if (next->GetObjectType() == EObjectTypes::WALL)
+		else if (nextObjectType == EObjectTypes::WALL)
 		{
 			return false;
 		}
-		else if (next->GetObjectType() == EObjectTypes::GOAL)
+		else if (nextObjectType == EObjectTypes::GOAL)
 		{
 			if (!next->hasNext())
 			{
@@ -246,9 +239,9 @@ bool FieldMap::IsPushable(int xFrom, int yFrom, int xTo, int yTo)
 			}
 			else
 			{
-				if (next == nullptr || nextToNext->GetObjectType() == EObjectTypes::GOAL)
+				if (next == nullptr || nextToNextObjectType == EObjectTypes::GOAL)
 				{
-					StandOnTheWayOrGoal(xFrom, yFrom, xTo, yTo);
+					StandOnWayOrGoal(xFrom, yFrom, xTo, yTo);
 					return true;
 				}
 				else
@@ -264,10 +257,10 @@ bool FieldMap::IsPushable(int xFrom, int yFrom, int xTo, int yTo)
 	}
 }
 
-void FieldMap::StandOnTheWayOrGoal(int xFrom, int yFrom, int xTo, int yTo)
+void FieldMap::StandOnWayOrGoal(int xFrom, int yFrom, int xTo, int yTo)
 {
-	Object* object = mObjectMap[yFrom * MAP_WIDTH + xFrom];
-	Object* obstacle = mObjectMap[yTo * MAP_WIDTH + xTo];
+	Object* object = mObjectMap[yFrom * FieldMap::MAP_WIDTH + xFrom];
+	Object* obstacle = mObjectMap[yTo * FieldMap::MAP_WIDTH + xTo];
 
 	assert(object != nullptr); // Moving object is always not nullptr.
 	assert(!(object->GetObjectType() == EObjectTypes::GOAL && !object->hasNext()));
@@ -281,12 +274,12 @@ void FieldMap::StandOnTheWayOrGoal(int xFrom, int yFrom, int xTo, int yTo)
 	}
 	else
 	{
-		mObjectMap[yFrom * MAP_WIDTH + xFrom] = nullptr;
+		mObjectMap[yFrom * FieldMap::MAP_WIDTH + xFrom] = nullptr;
 	}
 
 	if (obstacle == nullptr)
 	{
-		mObjectMap[yTo * MAP_WIDTH + xTo] = object;
+		mObjectMap[yTo * FieldMap::MAP_WIDTH + xTo] = object;
 	}
 	else if (obstacle->GetObjectType() == EObjectTypes::GOAL)
 	{
@@ -296,8 +289,8 @@ void FieldMap::StandOnTheWayOrGoal(int xFrom, int yFrom, int xTo, int yTo)
 
 void FieldMap::SetFieldMapLevel1()
 {
-	assert(GetMapWidth() == 20);
-	assert(GetMapHeight() == 20);
+	assert(FieldMap::MAP_WIDTH == 20);
+	assert(FieldMap::MAP_HEIGHT == 20);
 
 	PutObject(11, 17, EObjectTypes::PLAYER);
 	ResetFieldMapWithWalls();
@@ -375,8 +368,8 @@ void FieldMap::SetFieldMapLevel1()
 
 void FieldMap::SetFieldMapLevel2()
 {
-	assert(GetMapWidth() == 20);
-	assert(GetMapHeight() == 20);
+	assert(FieldMap::MAP_WIDTH == 20);
+	assert(FieldMap::MAP_HEIGHT == 20);
 
 	PutObject(11, 17, EObjectTypes::PLAYER);
 	ResetFieldMapWithWalls();
@@ -454,8 +447,8 @@ void FieldMap::SetFieldMapLevel2()
 
 void FieldMap::SetFieldMapLevel3()
 {
-	assert(GetMapWidth() == 20);
-	assert(GetMapHeight() == 20);
+	assert(FieldMap::MAP_WIDTH == 20);
+	assert(FieldMap::MAP_HEIGHT == 20);
 
 	PutObject(11, 17, EObjectTypes::PLAYER);
 	ResetFieldMapWithWalls();
@@ -533,8 +526,8 @@ void FieldMap::SetFieldMapLevel3()
 
 void FieldMap::SetFieldMapLevel4()
 {
-	assert(GetMapWidth() == 20);
-	assert(GetMapHeight() == 20);
+	assert(FieldMap::MAP_WIDTH == 20);
+	assert(FieldMap::MAP_HEIGHT == 20);
 
 	PutObject(11, 17, EObjectTypes::PLAYER);
 	ResetFieldMapWithWalls();
@@ -612,8 +605,8 @@ void FieldMap::SetFieldMapLevel4()
 
 void FieldMap::SetFieldMapLevel5()
 {
-	assert(GetMapWidth() == 20);
-	assert(GetMapHeight() == 20);
+	assert(FieldMap::MAP_WIDTH == 20);
+	assert(FieldMap::MAP_HEIGHT == 20);
 
 	PutObject(11, 17, EObjectTypes::PLAYER);
 	ResetFieldMapWithWalls();
@@ -691,8 +684,8 @@ void FieldMap::SetFieldMapLevel5()
 
 void FieldMap::SetFieldMapLevel6()
 {
-	assert(GetMapWidth() == 20);
-	assert(GetMapHeight() == 20);
+	assert(FieldMap::MAP_WIDTH == 20);
+	assert(FieldMap::MAP_HEIGHT == 20);
 
 	PutObject(11, 17, EObjectTypes::PLAYER);
 	ResetFieldMapWithWalls();

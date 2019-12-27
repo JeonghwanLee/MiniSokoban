@@ -47,7 +47,7 @@ bool EditorMode::ActionUp()
 
 bool EditorMode::ActionDown()
 {
-	if (mCursorY < mFieldMap->GetMapHeight() - 1)
+	if (mCursorY < FieldMap::MAP_HEIGHT - 1)
 	{
 		mCursorY++;
 	}
@@ -57,7 +57,7 @@ bool EditorMode::ActionDown()
 
 bool EditorMode::ActionRight()
 {
-	if (mCursorX < mFieldMap->GetMapWidth() - 1)
+	if (mCursorX < FieldMap::MAP_WIDTH - 1)
 	{
 		mCursorX++;
 	}
@@ -223,13 +223,10 @@ void EditorMode::DrawObjectDescription()
 
 void EditorMode::DrawFieldMap()
 {
-	size_t width = mFieldMap->GetMapWidth();
-	size_t height = mFieldMap->GetMapHeight();
 	Object* object;
-
-	for (unsigned int i = 0; i < height; i++)
+	for (unsigned int i = 0; i < FieldMap::MAP_HEIGHT; i++)
 	{
-		for (unsigned int j = 0; j < width; j++)
+		for (unsigned int j = 0; j < FieldMap::MAP_WIDTH; j++)
 		{
 			object = mFieldMap->GetObject(j, i);
 
