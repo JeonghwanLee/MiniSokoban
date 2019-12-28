@@ -14,7 +14,10 @@ PlayMode::~PlayMode()
 void PlayMode::Initialize()
 {
 	mbStageClearFlag = false;
-	mFieldMap = new FieldMap(mFieldMaps[*mLevelPtr - 1]);
+	if (mFieldMap == nullptr)
+	{
+		mFieldMap = new FieldMap(mFieldMaps[*mLevelPtr - 1]);
+	}
 }
 
 void PlayMode::Draw()

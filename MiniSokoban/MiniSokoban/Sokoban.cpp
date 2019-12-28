@@ -2,39 +2,38 @@
 
 Sokoban::Sokoban()
 	: mModeType()
-	, mGameMode(nullptr)
+	, mGameModes{ nullptr }
+	, mActiveMode(nullptr)
 	, mLevel(1)
 {
 	for (size_t level = 1; level <= Sokoban::MAX_LEVEL; level++)
 	{
 		mFieldMaps[level - 1].SetUpFieldMapByLevel(level);
 	}
+	mGameModes[0] = new MainMode();
+	mGameModes[1] = new EditorMode();
+	mGameModes[2] = new PlayMode(&mLevel);
 }
 
 Sokoban::~Sokoban()
 {
-	delete mGameMode;
+	delete[] mGameModes;
 }
 
 void Sokoban::PlayGame()
 {
 	while (true)
 	{
-		// Delete previous game mode object in heap
-		if (mGameMode != nullptr) {
-			delete mGameMode; 
-		}
-
 		switch (mModeType.GetGameMode())
 		{
 		case EModeTypes::MAIN_MODE:
-			mGameMode = new MainMode();
+			mActiveMode = mGameModes[0];
 			break;
 		case EModeTypes::EDITOR_MODE:
-			mGameMode = new EditorMode();
+			mActiveMode = mGameModes[1];
 			break;
 		case EModeTypes::PLAY_MODE:
-			mGameMode = new PlayMode(&mLevel);
+			mActiveMode = mGameModes[2];
 			break;
 		case EModeTypes::EXIT_MODE:
 			std::cout << "Terminating Game..." << std::endl;
@@ -43,16 +42,15 @@ void Sokoban::PlayGame()
 			assert(false);
 			break;
 		}
-
 		performMode();
 	}
 }
 
-void Sokoban::performMode() 
+void Sokoban::performMode()
 {
 	system("CLS");
-	mGameMode->SetFieldMaps(mFieldMaps);
-	mGameMode->SetModeType(&mModeType);
-	mGameMode->Initialize();
-	mGameMode->GetIntoMode();
+	mActiveMode->SetFieldMaps(mFieldMaps);
+	mActiveMode->SetModeType(&mModeType);
+	mActiveMode->Initialize();
+	mActiveMode->GetIntoMode();
 }

@@ -16,7 +16,10 @@ void GameMode::SetModeType(ModeType* modeType)
 
 void GameMode::SetFieldMaps(FieldMap* fieldMaps)
 {
-	mFieldMaps = fieldMaps;
+	if (mFieldMaps == nullptr)
+	{
+		mFieldMaps = fieldMaps;
+	}
 }
 
 void GameMode::GetIntoMode()

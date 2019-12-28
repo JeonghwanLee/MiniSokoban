@@ -64,12 +64,12 @@ void EditorMode::ActionEnter()
 
 void EditorMode::ActionEscape()
 {
+	mFieldMap = nullptr;
 	mModeType->SetMainMode();
 }
 
 void EditorMode::ActionSpace()
 {
-	mFieldMap->ResetFieldMapWithWalls();
 }
 
 void EditorMode::ActionNum(int level)
@@ -129,7 +129,7 @@ void EditorMode::drawSelectedLevelMap() const
 	std::cout << "   Press one of the above keys to select object type to set." << std::endl;
 	std::cout << std::endl;
 	SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_WHITE));
-	std::cout << "   ENTER: Set Selected Object on []  SPACE: Reset Field   ESC: Back to Main" << std::endl;
+	std::cout << "   ENTER: Set Selected Object on []    ESC: Save and Back to Main" << std::endl;
 }
 
 void EditorMode::drawFieldMap() const

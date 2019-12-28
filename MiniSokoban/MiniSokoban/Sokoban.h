@@ -18,12 +18,14 @@ public:
 	void PlayGame();
 
 	enum { MAX_LEVEL = 6 };
+	enum { MODE_COUNT = 3 };
 
 private:
 	void performMode();
 
 	ModeType mModeType;
-	GameMode* mGameMode;
+	GameMode* mGameModes[MODE_COUNT];
+	GameMode* mActiveMode;
 	FieldMap mFieldMaps[MAX_LEVEL];
 	size_t mLevel;
 };
