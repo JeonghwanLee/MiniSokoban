@@ -44,5 +44,4 @@ protected:
 	HANDLE mHConsole;
 	ModeType* mModeType;
 	FieldMap* mFieldMaps;
-	FieldMap* mFieldMap;
 };

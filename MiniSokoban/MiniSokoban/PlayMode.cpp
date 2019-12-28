@@ -2,13 +2,15 @@
 #include "Object.h"
 
 PlayMode::PlayMode(size_t* currentLevelPtr)
-	: mLevelPtr(currentLevelPtr)
+	: mFieldMap(nullptr)
+	, mLevelPtr(currentLevelPtr)
 	, mbStageClearFlag(false)
 {	
 }
 
 PlayMode::~PlayMode()
 {
+	delete mFieldMap;
 }
 
 void PlayMode::Initialize()

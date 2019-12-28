@@ -33,6 +33,7 @@ private:
 	void checkStageClear();
 	void drawGameClear();
 
+	FieldMap* mFieldMap;
 	size_t* mLevelPtr;
 	bool mbStageClearFlag;
 };

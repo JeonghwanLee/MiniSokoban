@@ -2,7 +2,8 @@
 #include "Object.h"
 
 EditorMode::EditorMode()
-	: mPutObjectType(EObjectTypes::BOX)
+	: mFieldMap(nullptr)
+	, mPutObjectType(EObjectTypes::BOX)
 	, mCursorX(0)
 	, mCursorY(0)
 {

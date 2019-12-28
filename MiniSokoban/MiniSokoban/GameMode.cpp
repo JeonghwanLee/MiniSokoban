@@ -5,7 +5,6 @@ GameMode::GameMode()
 	: mHConsole(GetStdHandle(STD_OUTPUT_HANDLE))
 	, mModeType(nullptr)
 	, mFieldMaps(nullptr)
-	, mFieldMap(nullptr)
 {
 }
 

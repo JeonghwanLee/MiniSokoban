@@ -1,2 +1,9 @@
 ﻿  EditorMode.cpp
+  GameMode.cpp
+  MainMode.cpp
+  PlayMode.cpp
+  Sokoban.cpp
+C:\Users\Jeonghwan Lee\Downloads\dev\MiniSokoban\MiniSokoban\MiniSokoban\Sokoban.cpp(20,21): warning C4154: deletion of an array expression; conversion to pointer supplied
+  main.cpp
+  Generating Code...
   MiniSokoban.vcxproj -> C:\Users\Jeonghwan Lee\Downloads\dev\MiniSokoban\MiniSokoban\x64\Debug\MiniSokoban.exe

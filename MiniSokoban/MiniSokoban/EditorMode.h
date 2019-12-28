@@ -32,6 +32,7 @@ private:
 	virtual void drawFieldMap() const override;
 	virtual void printObjectDescriptionByObjectType(EObjectTypes objectType) const override;
 
+	FieldMap* mFieldMap;
 	EObjectTypes mPutObjectType;
 	unsigned int mCursorX;
 	unsigned int mCursorY;
