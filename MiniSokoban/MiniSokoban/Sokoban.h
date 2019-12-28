@@ -1,11 +1,12 @@
 #pragma once
+
 #include "Common.h"
-#include "StartMode.h"
 #include "EditorMode.h"
-#include "PlayMode.h"
+#include "FieldMap.h"
 #include "ModeType.h"
 #include "Object.h"
-#include "FieldMap.h"
+#include "PlayMode.h"
+#include "MainMode.h"
 
 class Sokoban
 {
@@ -19,7 +20,7 @@ public:
 	enum { MAX_LEVEL = 6 };
 
 private:
-	void PerformMode();
+	void performMode();
 
 	ModeType mModeType;
 	GameMode* mGameMode;

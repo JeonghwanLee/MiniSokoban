@@ -15,28 +15,31 @@ public:
 
 	void GetIntoMode();
 	void WaitForKeyInput();
-	void Clear();
-	bool IsKeyPressed(int key);
+	void SetCursorOrigin();
+	bool IsKeyPressed(int key) const;
 	virtual void Initialize() = 0;
 	virtual void Draw() = 0;
 
-	virtual bool ActionLeft() = 0;
-	virtual bool ActionUp() = 0;
-	virtual bool ActionDown() = 0;
-	virtual bool ActionRight() = 0;
-	virtual bool ActionEnter() = 0;
-	virtual bool ActionEscape() = 0;
-	virtual bool ActionSpace() = 0;
-	virtual bool ActionNum(int level) = 0;
-	virtual bool ActionPlayer() = 0;
-	virtual bool ActionBox() = 0;
-	virtual bool ActionWall() = 0;
-	virtual bool ActionGoal() = 0;
-	virtual bool ActionWay() = 0;
+	virtual void ActionLeft() = 0;
+	virtual void ActionUp() = 0;
+	virtual void ActionDown() = 0;
+	virtual void ActionRight() = 0;
+	virtual void ActionEnter() = 0;
+	virtual void ActionEscape() = 0;
+	virtual void ActionSpace() = 0;
+	virtual void ActionNum(int level) = 0;
+	virtual void ActionPlayer() = 0;
+	virtual void ActionBox() = 0;
+	virtual void ActionWall() = 0;
+	virtual void ActionGoal() = 0;
+	virtual void ActionWay() = 0;
 
 protected:
-	virtual void DrawFieldMap() = 0;
-	virtual void DrawObjectDescription() = 0;
+	virtual void drawFieldMap() const = 0;
+	virtual void printObjectDescriptionByObjectType(EObjectTypes objectType) const = 0;
+
+	void drawObjectDescription() const;
+	void printObjectByColor(EObjectColors objectColor, bool isCursorOn) const;
 
 	HANDLE mHConsole;
 	ModeType* mModeType;

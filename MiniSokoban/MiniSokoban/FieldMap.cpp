@@ -6,7 +6,7 @@ FieldMap::FieldMap()
 	, mPlayer(nullptr)
 	, mPlayerX(1)
 	, mPlayerY(1)
-	, bMoveNextObject(false)
+	, mbMoveNextObject(false)
 {
 	int x, y;
 	for (int i = 0; i < FieldMap::MAP_WIDTH * FieldMap::MAP_WIDTH; i++)
@@ -63,7 +63,7 @@ void FieldMap::ResetFieldMapWithWalls()
 	for (int i = 0; i < FieldMap::MAP_WIDTH * FieldMap::MAP_WIDTH; i++)
 	{
 		if (mObjectMap[i] != nullptr && mObjectMap[i]->GetObjectType() != EObjectTypes::PLAYER) {
-			if (mObjectMap[i]->GetObjectType() == EObjectTypes::GOAL && mObjectMap[i]->hasObjectOnGoal())
+			if (mObjectMap[i]->GetObjectType() == EObjectTypes::GOAL && mObjectMap[i]->IsThereObjectOnGoal())
 			{
 				mObjectMap[i]->SetObjectOnGoal(nullptr);
 			}
@@ -81,22 +81,22 @@ void FieldMap::SetUpFieldMapByLevel(size_t level)
 	switch (level)
 	{
 	case 1:
-		SetFieldMapLevel1();
+		setFieldMapLevel1();
 		break;
 	case 2:
-		SetFieldMapLevel2();
+		setFieldMapLevel2();
 		break;
 	case 3:
-		SetFieldMapLevel3();
+		setFieldMapLevel3();
 		break;
 	case 4:
-		SetFieldMapLevel4();
+		setFieldMapLevel4();
 		return;
 	case 5:
-		SetFieldMapLevel5();
+		setFieldMapLevel5();
 		return;
 	case 6:
-		SetFieldMapLevel6();
+		setFieldMapLevel6();
 		return;
 	default:
 		assert(false, "Level is out of range.");
@@ -145,66 +145,66 @@ void FieldMap::PutObject(int x, int y, EObjectTypes objectType)
 
 void FieldMap::MovePlayerLeft()
 {
-	if (IsPushable(mPlayerX - 1, mPlayerY, mPlayerX - 2, mPlayerY))
+	if (isPushable(mPlayerX - 1, mPlayerY, mPlayerX - 2, mPlayerY))
 	{
-		if (bMoveNextObject)
+		if (mbMoveNextObject)
 		{
-			MoveObjectFromTo(mPlayerX - 1, mPlayerY, mPlayerX - 2, mPlayerY);
-			bMoveNextObject = false;
+			moveObjectFromTo(mPlayerX - 1, mPlayerY, mPlayerX - 2, mPlayerY);
+			mbMoveNextObject = false;
 		}
-		MoveObjectFromTo(mPlayerX, mPlayerY, mPlayerX - 1, mPlayerY);
+		moveObjectFromTo(mPlayerX, mPlayerY, mPlayerX - 1, mPlayerY);
 		mPlayerX--;
 	}
 }
 
 void FieldMap::MovePlayerRight()
 {
-	if (IsPushable(mPlayerX + 1, mPlayerY, mPlayerX + 2, mPlayerY))
+	if (isPushable(mPlayerX + 1, mPlayerY, mPlayerX + 2, mPlayerY))
 	{
-		if (bMoveNextObject)
+		if (mbMoveNextObject)
 		{
-			MoveObjectFromTo(mPlayerX + 1, mPlayerY, mPlayerX + 2, mPlayerY);
-			bMoveNextObject = false;
+			moveObjectFromTo(mPlayerX + 1, mPlayerY, mPlayerX + 2, mPlayerY);
+			mbMoveNextObject = false;
 		}
-		MoveObjectFromTo(mPlayerX, mPlayerY, mPlayerX + 1, mPlayerY);
+		moveObjectFromTo(mPlayerX, mPlayerY, mPlayerX + 1, mPlayerY);
 		mPlayerX++;
 	}
 }
 
 void FieldMap::MovePlayerUp()
 {
-	if (IsPushable(mPlayerX, mPlayerY - 1, mPlayerX, mPlayerY - 2))
+	if (isPushable(mPlayerX, mPlayerY - 1, mPlayerX, mPlayerY - 2))
 	{
-		if (bMoveNextObject)
+		if (mbMoveNextObject)
 		{
-			MoveObjectFromTo(mPlayerX, mPlayerY - 1, mPlayerX, mPlayerY - 2);
-			bMoveNextObject = false;
+			moveObjectFromTo(mPlayerX, mPlayerY - 1, mPlayerX, mPlayerY - 2);
+			mbMoveNextObject = false;
 		}
-		MoveObjectFromTo(mPlayerX, mPlayerY, mPlayerX, mPlayerY - 1);
+		moveObjectFromTo(mPlayerX, mPlayerY, mPlayerX, mPlayerY - 1);
 		mPlayerY--;
 	}
 }
 
 void FieldMap::MovePlayerDown()
 {
-	if (IsPushable(mPlayerX, mPlayerY + 1, mPlayerX, mPlayerY + 2))
+	if (isPushable(mPlayerX, mPlayerY + 1, mPlayerX, mPlayerY + 2))
 	{
-		if (bMoveNextObject)
+		if (mbMoveNextObject)
 		{
-			MoveObjectFromTo(mPlayerX, mPlayerY + 1, mPlayerX, mPlayerY + 2);
-			bMoveNextObject = false;
+			moveObjectFromTo(mPlayerX, mPlayerY + 1, mPlayerX, mPlayerY + 2);
+			mbMoveNextObject = false;
 		}
-		MoveObjectFromTo(mPlayerX, mPlayerY, mPlayerX, mPlayerY + 1);
+		moveObjectFromTo(mPlayerX, mPlayerY, mPlayerX, mPlayerY + 1);
 		mPlayerY++;
 	}
 }
 
-Object* FieldMap::GetObject(int x, int y)
+Object* FieldMap::GetObjectFromMap(int x, int y) const
 {
 	return mObjectMap[y * FieldMap::MAP_WIDTH + x];
 }
 
-bool FieldMap::IsPushable(int xFrom, int yFrom, int xTo, int yTo)
+bool FieldMap::isPushable(int xFrom, int yFrom, int xTo, int yTo)
 {
 	if (xFrom < 0 || xFrom > FieldMap::MAP_WIDTH - 1 || yFrom < 0 || yFrom > FieldMap::MAP_HEIGHT - 1)
 	{
@@ -234,9 +234,9 @@ bool FieldMap::IsPushable(int xFrom, int yFrom, int xTo, int yTo)
 		nextObjectType = next->GetObjectType();
 		if (nextObjectType == EObjectTypes::BOX)
 		{
-			if (nextToNext == nullptr || (nextToNext->GetObjectType() == EObjectTypes::GOAL && !nextToNext->hasObjectOnGoal()))
+			if (nextToNext == nullptr || (nextToNext->GetObjectType() == EObjectTypes::GOAL && !nextToNext->IsThereObjectOnGoal()))
 			{
-				bMoveNextObject = true;
+				mbMoveNextObject = true;
 				return true;
 			}
 			else
@@ -250,11 +250,11 @@ bool FieldMap::IsPushable(int xFrom, int yFrom, int xTo, int yTo)
 		}
 		else if (nextObjectType == EObjectTypes::GOAL)
 		{
-			if (next->hasObjectOnGoal())
+			if (next->IsThereObjectOnGoal())
 			{
-				if (nextToNext->GetObjectType() == EObjectTypes::GOAL && !nextToNext->hasObjectOnGoal())
+				if (nextToNext == nullptr || (nextToNext->GetObjectType() == EObjectTypes::GOAL && !nextToNext->IsThereObjectOnGoal()) )
 				{
-					bMoveNextObject = true;
+					mbMoveNextObject = true;
 					return true;
 				}
 				else
@@ -270,13 +270,13 @@ bool FieldMap::IsPushable(int xFrom, int yFrom, int xTo, int yTo)
 	}
 }
 
-void FieldMap::MoveObjectFromTo(int xFrom, int yFrom, int xTo, int yTo)
+void FieldMap::moveObjectFromTo(int xFrom, int yFrom, int xTo, int yTo)
 {
 	Object* fromObject = mObjectMap[yFrom * FieldMap::MAP_WIDTH + xFrom]; 
 	Object* toObject = mObjectMap[yTo * FieldMap::MAP_WIDTH + xTo]; 
 
 	assert(fromObject != nullptr); // Moving object is always not nullptr.
-	assert(!(fromObject->GetObjectType() == EObjectTypes::GOAL && !fromObject->hasObjectOnGoal()));
+	assert(!(fromObject->GetObjectType() == EObjectTypes::GOAL && !fromObject->IsThereObjectOnGoal()));
 	assert(toObject == nullptr || toObject->GetObjectType() == EObjectTypes::GOAL);
 
 	if (fromObject->GetObjectType() == EObjectTypes::GOAL)
@@ -300,7 +300,7 @@ void FieldMap::MoveObjectFromTo(int xFrom, int yFrom, int xTo, int yTo)
 	}
 }
 
-void FieldMap::SetFieldMapLevel1()
+void FieldMap::setFieldMapLevel1()
 {
 	assert(FieldMap::MAP_WIDTH == 20);
 	assert(FieldMap::MAP_HEIGHT == 20);
@@ -379,7 +379,7 @@ void FieldMap::SetFieldMapLevel1()
 	PutObject(5, 11, EObjectTypes::BOX);
 }
 
-void FieldMap::SetFieldMapLevel2()
+void FieldMap::setFieldMapLevel2()
 {
 	assert(FieldMap::MAP_WIDTH == 20);
 	assert(FieldMap::MAP_HEIGHT == 20);
@@ -443,14 +443,251 @@ void FieldMap::SetFieldMapLevel2()
 	PutObject(6, 10, EObjectTypes::WAY);
 	PutObject(7, 10, EObjectTypes::WAY);
 
-	PutObject(16, 17, EObjectTypes::GOAL);
+	PutObject(16, 17, EObjectTypes::WAY);
+	PutObject(17, 17, EObjectTypes::WAY);
+	PutObject(16, 16, EObjectTypes::WAY);
+	PutObject(17, 16, EObjectTypes::WAY);
+	PutObject(16, 15, EObjectTypes::GOAL);
+	PutObject(17, 15, EObjectTypes::GOAL);
+
+	PutObject(2, 16, EObjectTypes::WAY);
+	PutObject(5, 16, EObjectTypes::WAY);
+	PutObject(5, 13, EObjectTypes::WAY);
+	PutObject(7, 13, EObjectTypes::WAY);
+	PutObject(7, 12, EObjectTypes::BOX);
+	PutObject(5, 11, EObjectTypes::BOX);
+}
+
+void FieldMap::setFieldMapLevel3()
+{
+	assert(FieldMap::MAP_WIDTH == 20);
+	assert(FieldMap::MAP_HEIGHT == 20);
+
+	PutObject(11, 17, EObjectTypes::PLAYER);
+	ResetFieldMapWithWalls();
+
+	PutObject(5, 18, EObjectTypes::WAY);
+	PutObject(6, 18, EObjectTypes::WAY);
+	PutObject(7, 18, EObjectTypes::WAY);
+	PutObject(8, 18, EObjectTypes::WAY);
+	PutObject(9, 18, EObjectTypes::WAY);
+	PutObject(5, 17, EObjectTypes::WAY);
+	PutObject(9, 17, EObjectTypes::WAY);
+	PutObject(14, 17, EObjectTypes::WAY);
+	PutObject(15, 17, EObjectTypes::WAY);
+	PutObject(16, 17, EObjectTypes::WAY);
+	PutObject(17, 17, EObjectTypes::WAY);
+	PutObject(1, 16, EObjectTypes::WAY);
+	PutObject(2, 16, EObjectTypes::WAY);
+	PutObject(3, 16, EObjectTypes::WAY);
+	PutObject(4, 16, EObjectTypes::WAY);
+	PutObject(5, 16, EObjectTypes::WAY);
+	PutObject(6, 16, EObjectTypes::WAY);
+	PutObject(7, 16, EObjectTypes::WAY);
+	PutObject(8, 16, EObjectTypes::WAY);
+	PutObject(9, 16, EObjectTypes::WAY);
+	PutObject(10, 16, EObjectTypes::WAY);
+	PutObject(11, 16, EObjectTypes::WAY);
+	PutObject(12, 16, EObjectTypes::WAY);
+	PutObject(13, 16, EObjectTypes::WAY);
+	PutObject(14, 16, EObjectTypes::WAY);
+	PutObject(15, 16, EObjectTypes::WAY);
+	PutObject(16, 16, EObjectTypes::WAY);
+	PutObject(17, 16, EObjectTypes::WAY);
+	PutObject(1, 15, EObjectTypes::WAY);
+	PutObject(2, 15, EObjectTypes::WAY);
+	PutObject(3, 15, EObjectTypes::WAY);
+	PutObject(5, 15, EObjectTypes::WAY);
+	PutObject(8, 15, EObjectTypes::WAY);
+	PutObject(14, 15, EObjectTypes::WAY);
+	PutObject(15, 15, EObjectTypes::WAY);
+	PutObject(16, 15, EObjectTypes::WAY);
+	PutObject(17, 15, EObjectTypes::WAY);
+	PutObject(3, 14, EObjectTypes::WAY);
+	PutObject(5, 14, EObjectTypes::WAY);
+	PutObject(8, 14, EObjectTypes::WAY);
+	PutObject(3, 13, EObjectTypes::WAY);
+	PutObject(4, 13, EObjectTypes::WAY);
+	PutObject(5, 13, EObjectTypes::WAY);
+	PutObject(6, 13, EObjectTypes::WAY);
+	PutObject(7, 13, EObjectTypes::WAY);
+	PutObject(8, 13, EObjectTypes::WAY);
+	PutObject(5, 12, EObjectTypes::WAY);
+	PutObject(6, 12, EObjectTypes::WAY);
+	PutObject(7, 12, EObjectTypes::WAY);
+	PutObject(5, 11, EObjectTypes::WAY);
+	PutObject(6, 11, EObjectTypes::WAY);
+	PutObject(7, 11, EObjectTypes::WAY);
+	PutObject(5, 10, EObjectTypes::WAY);
+	PutObject(6, 10, EObjectTypes::WAY);
+	PutObject(7, 10, EObjectTypes::WAY);
+
+	PutObject(16, 17, EObjectTypes::WAY);
+	PutObject(17, 17, EObjectTypes::WAY);
+	PutObject(16, 16, EObjectTypes::WAY);
+	PutObject(17, 16, EObjectTypes::GOAL);
+	PutObject(16, 15, EObjectTypes::GOAL);
+	PutObject(17, 15, EObjectTypes::GOAL);
+
+	PutObject(2, 16, EObjectTypes::WAY);
+	PutObject(5, 16, EObjectTypes::WAY);
+	PutObject(5, 13, EObjectTypes::WAY);
+	PutObject(7, 13, EObjectTypes::BOX);
+	PutObject(7, 12, EObjectTypes::BOX);
+	PutObject(5, 11, EObjectTypes::BOX);
+}
+
+void FieldMap::setFieldMapLevel4()
+{
+	assert(FieldMap::MAP_WIDTH == 20);
+	assert(FieldMap::MAP_HEIGHT == 20);
+
+	PutObject(11, 17, EObjectTypes::PLAYER);
+	ResetFieldMapWithWalls();
+
+	PutObject(5, 18, EObjectTypes::WAY);
+	PutObject(6, 18, EObjectTypes::WAY);
+	PutObject(7, 18, EObjectTypes::WAY);
+	PutObject(8, 18, EObjectTypes::WAY);
+	PutObject(9, 18, EObjectTypes::WAY);
+	PutObject(5, 17, EObjectTypes::WAY);
+	PutObject(9, 17, EObjectTypes::WAY);
+	PutObject(14, 17, EObjectTypes::WAY);
+	PutObject(15, 17, EObjectTypes::WAY);
+	PutObject(16, 17, EObjectTypes::WAY);
+	PutObject(17, 17, EObjectTypes::WAY);
+	PutObject(1, 16, EObjectTypes::WAY);
+	PutObject(2, 16, EObjectTypes::WAY);
+	PutObject(3, 16, EObjectTypes::WAY);
+	PutObject(4, 16, EObjectTypes::WAY);
+	PutObject(5, 16, EObjectTypes::WAY);
+	PutObject(6, 16, EObjectTypes::WAY);
+	PutObject(7, 16, EObjectTypes::WAY);
+	PutObject(8, 16, EObjectTypes::WAY);
+	PutObject(9, 16, EObjectTypes::WAY);
+	PutObject(10, 16, EObjectTypes::WAY);
+	PutObject(11, 16, EObjectTypes::WAY);
+	PutObject(12, 16, EObjectTypes::WAY);
+	PutObject(13, 16, EObjectTypes::WAY);
+	PutObject(14, 16, EObjectTypes::WAY);
+	PutObject(15, 16, EObjectTypes::WAY);
+	PutObject(16, 16, EObjectTypes::WAY);
+	PutObject(17, 16, EObjectTypes::WAY);
+	PutObject(1, 15, EObjectTypes::WAY);
+	PutObject(2, 15, EObjectTypes::WAY);
+	PutObject(3, 15, EObjectTypes::WAY);
+	PutObject(5, 15, EObjectTypes::WAY);
+	PutObject(8, 15, EObjectTypes::WAY);
+	PutObject(14, 15, EObjectTypes::WAY);
+	PutObject(15, 15, EObjectTypes::WAY);
+	PutObject(16, 15, EObjectTypes::WAY);
+	PutObject(17, 15, EObjectTypes::WAY);
+	PutObject(3, 14, EObjectTypes::WAY);
+	PutObject(5, 14, EObjectTypes::WAY);
+	PutObject(8, 14, EObjectTypes::WAY);
+	PutObject(3, 13, EObjectTypes::WAY);
+	PutObject(4, 13, EObjectTypes::WAY);
+	PutObject(5, 13, EObjectTypes::WAY);
+	PutObject(6, 13, EObjectTypes::WAY);
+	PutObject(7, 13, EObjectTypes::WAY);
+	PutObject(8, 13, EObjectTypes::WAY);
+	PutObject(5, 12, EObjectTypes::WAY);
+	PutObject(6, 12, EObjectTypes::WAY);
+	PutObject(7, 12, EObjectTypes::WAY);
+	PutObject(5, 11, EObjectTypes::WAY);
+	PutObject(6, 11, EObjectTypes::WAY);
+	PutObject(7, 11, EObjectTypes::WAY);
+	PutObject(5, 10, EObjectTypes::WAY);
+	PutObject(6, 10, EObjectTypes::WAY);
+	PutObject(7, 10, EObjectTypes::WAY);
+
+	PutObject(16, 17, EObjectTypes::WAY);
+	PutObject(17, 17, EObjectTypes::WAY);
+	PutObject(16, 16, EObjectTypes::GOAL);
+	PutObject(17, 16, EObjectTypes::GOAL);
+	PutObject(16, 15, EObjectTypes::GOAL);
+	PutObject(17, 15, EObjectTypes::GOAL);
+
+	PutObject(2, 16, EObjectTypes::WAY);
+	PutObject(5, 16, EObjectTypes::WAY);
+	PutObject(5, 13, EObjectTypes::BOX);
+	PutObject(7, 13, EObjectTypes::BOX);
+	PutObject(7, 12, EObjectTypes::BOX);
+	PutObject(5, 11, EObjectTypes::BOX);
+}
+
+void FieldMap::setFieldMapLevel5()
+{
+	assert(FieldMap::MAP_WIDTH == 20);
+	assert(FieldMap::MAP_HEIGHT == 20);
+
+	PutObject(11, 17, EObjectTypes::PLAYER);
+	ResetFieldMapWithWalls();
+
+	PutObject(5, 18, EObjectTypes::WAY);
+	PutObject(6, 18, EObjectTypes::WAY);
+	PutObject(7, 18, EObjectTypes::WAY);
+	PutObject(8, 18, EObjectTypes::WAY);
+	PutObject(9, 18, EObjectTypes::WAY);
+	PutObject(5, 17, EObjectTypes::WAY);
+	PutObject(9, 17, EObjectTypes::WAY);
+	PutObject(14, 17, EObjectTypes::WAY);
+	PutObject(15, 17, EObjectTypes::WAY);
+	PutObject(16, 17, EObjectTypes::WAY);
+	PutObject(17, 17, EObjectTypes::WAY);
+	PutObject(1, 16, EObjectTypes::WAY);
+	PutObject(2, 16, EObjectTypes::WAY);
+	PutObject(3, 16, EObjectTypes::WAY);
+	PutObject(4, 16, EObjectTypes::WAY);
+	PutObject(5, 16, EObjectTypes::WAY);
+	PutObject(6, 16, EObjectTypes::WAY);
+	PutObject(7, 16, EObjectTypes::WAY);
+	PutObject(8, 16, EObjectTypes::WAY);
+	PutObject(9, 16, EObjectTypes::WAY);
+	PutObject(10, 16, EObjectTypes::WAY);
+	PutObject(11, 16, EObjectTypes::WAY);
+	PutObject(12, 16, EObjectTypes::WAY);
+	PutObject(13, 16, EObjectTypes::WAY);
+	PutObject(14, 16, EObjectTypes::WAY);
+	PutObject(15, 16, EObjectTypes::WAY);
+	PutObject(16, 16, EObjectTypes::WAY);
+	PutObject(17, 16, EObjectTypes::WAY);
+	PutObject(1, 15, EObjectTypes::WAY);
+	PutObject(2, 15, EObjectTypes::WAY);
+	PutObject(3, 15, EObjectTypes::WAY);
+	PutObject(5, 15, EObjectTypes::WAY);
+	PutObject(8, 15, EObjectTypes::WAY);
+	PutObject(14, 15, EObjectTypes::WAY);
+	PutObject(15, 15, EObjectTypes::WAY);
+	PutObject(16, 15, EObjectTypes::WAY);
+	PutObject(17, 15, EObjectTypes::WAY);
+	PutObject(3, 14, EObjectTypes::WAY);
+	PutObject(5, 14, EObjectTypes::WAY);
+	PutObject(8, 14, EObjectTypes::WAY);
+	PutObject(3, 13, EObjectTypes::WAY);
+	PutObject(4, 13, EObjectTypes::WAY);
+	PutObject(5, 13, EObjectTypes::WAY);
+	PutObject(6, 13, EObjectTypes::WAY);
+	PutObject(7, 13, EObjectTypes::WAY);
+	PutObject(8, 13, EObjectTypes::WAY);
+	PutObject(5, 12, EObjectTypes::WAY);
+	PutObject(6, 12, EObjectTypes::WAY);
+	PutObject(7, 12, EObjectTypes::WAY);
+	PutObject(5, 11, EObjectTypes::WAY);
+	PutObject(6, 11, EObjectTypes::WAY);
+	PutObject(7, 11, EObjectTypes::WAY);
+	PutObject(5, 10, EObjectTypes::WAY);
+	PutObject(6, 10, EObjectTypes::WAY);
+	PutObject(7, 10, EObjectTypes::WAY);
+
+	PutObject(16, 17, EObjectTypes::WAY);
 	PutObject(17, 17, EObjectTypes::GOAL);
 	PutObject(16, 16, EObjectTypes::GOAL);
 	PutObject(17, 16, EObjectTypes::GOAL);
 	PutObject(16, 15, EObjectTypes::GOAL);
 	PutObject(17, 15, EObjectTypes::GOAL);
 
-	PutObject(2, 16, EObjectTypes::BOX);
+	PutObject(2, 16, EObjectTypes::WAY);
 	PutObject(5, 16, EObjectTypes::BOX);
 	PutObject(5, 13, EObjectTypes::BOX);
 	PutObject(7, 13, EObjectTypes::BOX);
@@ -458,244 +695,7 @@ void FieldMap::SetFieldMapLevel2()
 	PutObject(5, 11, EObjectTypes::BOX);
 }
 
-void FieldMap::SetFieldMapLevel3()
-{
-	assert(FieldMap::MAP_WIDTH == 20);
-	assert(FieldMap::MAP_HEIGHT == 20);
-
-	PutObject(11, 17, EObjectTypes::PLAYER);
-	ResetFieldMapWithWalls();
-
-	PutObject(5, 18, EObjectTypes::WAY);
-	PutObject(6, 18, EObjectTypes::WAY);
-	PutObject(7, 18, EObjectTypes::WAY);
-	PutObject(8, 18, EObjectTypes::WAY);
-	PutObject(9, 18, EObjectTypes::WAY);
-	PutObject(5, 17, EObjectTypes::WAY);
-	PutObject(9, 17, EObjectTypes::WAY);
-	PutObject(14, 17, EObjectTypes::WAY);
-	PutObject(15, 17, EObjectTypes::WAY);
-	PutObject(16, 17, EObjectTypes::WAY);
-	PutObject(17, 17, EObjectTypes::WAY);
-	PutObject(1, 16, EObjectTypes::WAY);
-	PutObject(2, 16, EObjectTypes::WAY);
-	PutObject(3, 16, EObjectTypes::WAY);
-	PutObject(4, 16, EObjectTypes::WAY);
-	PutObject(5, 16, EObjectTypes::WAY);
-	PutObject(6, 16, EObjectTypes::WAY);
-	PutObject(7, 16, EObjectTypes::WAY);
-	PutObject(8, 16, EObjectTypes::WAY);
-	PutObject(9, 16, EObjectTypes::WAY);
-	PutObject(10, 16, EObjectTypes::WAY);
-	PutObject(11, 16, EObjectTypes::WAY);
-	PutObject(12, 16, EObjectTypes::WAY);
-	PutObject(13, 16, EObjectTypes::WAY);
-	PutObject(14, 16, EObjectTypes::WAY);
-	PutObject(15, 16, EObjectTypes::WAY);
-	PutObject(16, 16, EObjectTypes::WAY);
-	PutObject(17, 16, EObjectTypes::WAY);
-	PutObject(1, 15, EObjectTypes::WAY);
-	PutObject(2, 15, EObjectTypes::WAY);
-	PutObject(3, 15, EObjectTypes::WAY);
-	PutObject(5, 15, EObjectTypes::WAY);
-	PutObject(8, 15, EObjectTypes::WAY);
-	PutObject(14, 15, EObjectTypes::WAY);
-	PutObject(15, 15, EObjectTypes::WAY);
-	PutObject(16, 15, EObjectTypes::WAY);
-	PutObject(17, 15, EObjectTypes::WAY);
-	PutObject(3, 14, EObjectTypes::WAY);
-	PutObject(5, 14, EObjectTypes::WAY);
-	PutObject(8, 14, EObjectTypes::WAY);
-	PutObject(3, 13, EObjectTypes::WAY);
-	PutObject(4, 13, EObjectTypes::WAY);
-	PutObject(5, 13, EObjectTypes::WAY);
-	PutObject(6, 13, EObjectTypes::WAY);
-	PutObject(7, 13, EObjectTypes::WAY);
-	PutObject(8, 13, EObjectTypes::WAY);
-	PutObject(5, 12, EObjectTypes::WAY);
-	PutObject(6, 12, EObjectTypes::WAY);
-	PutObject(7, 12, EObjectTypes::WAY);
-	PutObject(5, 11, EObjectTypes::WAY);
-	PutObject(6, 11, EObjectTypes::WAY);
-	PutObject(7, 11, EObjectTypes::WAY);
-	PutObject(5, 10, EObjectTypes::WAY);
-	PutObject(6, 10, EObjectTypes::WAY);
-	PutObject(7, 10, EObjectTypes::WAY);
-
-	PutObject(16, 17, EObjectTypes::GOAL);
-	PutObject(17, 17, EObjectTypes::GOAL);
-	PutObject(16, 16, EObjectTypes::GOAL);
-	PutObject(17, 16, EObjectTypes::GOAL);
-	PutObject(16, 15, EObjectTypes::GOAL);
-	PutObject(17, 15, EObjectTypes::GOAL);
-
-	PutObject(2, 16, EObjectTypes::BOX);
-	PutObject(5, 16, EObjectTypes::BOX);
-	PutObject(5, 13, EObjectTypes::BOX);
-	PutObject(7, 13, EObjectTypes::BOX);
-	PutObject(7, 12, EObjectTypes::BOX);
-	PutObject(5, 11, EObjectTypes::BOX);
-}
-
-void FieldMap::SetFieldMapLevel4()
-{
-	assert(FieldMap::MAP_WIDTH == 20);
-	assert(FieldMap::MAP_HEIGHT == 20);
-
-	PutObject(11, 17, EObjectTypes::PLAYER);
-	ResetFieldMapWithWalls();
-
-	PutObject(5, 18, EObjectTypes::WAY);
-	PutObject(6, 18, EObjectTypes::WAY);
-	PutObject(7, 18, EObjectTypes::WAY);
-	PutObject(8, 18, EObjectTypes::WAY);
-	PutObject(9, 18, EObjectTypes::WAY);
-	PutObject(5, 17, EObjectTypes::WAY);
-	PutObject(9, 17, EObjectTypes::WAY);
-	PutObject(14, 17, EObjectTypes::WAY);
-	PutObject(15, 17, EObjectTypes::WAY);
-	PutObject(16, 17, EObjectTypes::WAY);
-	PutObject(17, 17, EObjectTypes::WAY);
-	PutObject(1, 16, EObjectTypes::WAY);
-	PutObject(2, 16, EObjectTypes::WAY);
-	PutObject(3, 16, EObjectTypes::WAY);
-	PutObject(4, 16, EObjectTypes::WAY);
-	PutObject(5, 16, EObjectTypes::WAY);
-	PutObject(6, 16, EObjectTypes::WAY);
-	PutObject(7, 16, EObjectTypes::WAY);
-	PutObject(8, 16, EObjectTypes::WAY);
-	PutObject(9, 16, EObjectTypes::WAY);
-	PutObject(10, 16, EObjectTypes::WAY);
-	PutObject(11, 16, EObjectTypes::WAY);
-	PutObject(12, 16, EObjectTypes::WAY);
-	PutObject(13, 16, EObjectTypes::WAY);
-	PutObject(14, 16, EObjectTypes::WAY);
-	PutObject(15, 16, EObjectTypes::WAY);
-	PutObject(16, 16, EObjectTypes::WAY);
-	PutObject(17, 16, EObjectTypes::WAY);
-	PutObject(1, 15, EObjectTypes::WAY);
-	PutObject(2, 15, EObjectTypes::WAY);
-	PutObject(3, 15, EObjectTypes::WAY);
-	PutObject(5, 15, EObjectTypes::WAY);
-	PutObject(8, 15, EObjectTypes::WAY);
-	PutObject(14, 15, EObjectTypes::WAY);
-	PutObject(15, 15, EObjectTypes::WAY);
-	PutObject(16, 15, EObjectTypes::WAY);
-	PutObject(17, 15, EObjectTypes::WAY);
-	PutObject(3, 14, EObjectTypes::WAY);
-	PutObject(5, 14, EObjectTypes::WAY);
-	PutObject(8, 14, EObjectTypes::WAY);
-	PutObject(3, 13, EObjectTypes::WAY);
-	PutObject(4, 13, EObjectTypes::WAY);
-	PutObject(5, 13, EObjectTypes::WAY);
-	PutObject(6, 13, EObjectTypes::WAY);
-	PutObject(7, 13, EObjectTypes::WAY);
-	PutObject(8, 13, EObjectTypes::WAY);
-	PutObject(5, 12, EObjectTypes::WAY);
-	PutObject(6, 12, EObjectTypes::WAY);
-	PutObject(7, 12, EObjectTypes::WAY);
-	PutObject(5, 11, EObjectTypes::WAY);
-	PutObject(6, 11, EObjectTypes::WAY);
-	PutObject(7, 11, EObjectTypes::WAY);
-	PutObject(5, 10, EObjectTypes::WAY);
-	PutObject(6, 10, EObjectTypes::WAY);
-	PutObject(7, 10, EObjectTypes::WAY);
-
-	PutObject(16, 17, EObjectTypes::GOAL);
-	PutObject(17, 17, EObjectTypes::GOAL);
-	PutObject(16, 16, EObjectTypes::GOAL);
-	PutObject(17, 16, EObjectTypes::GOAL);
-	PutObject(16, 15, EObjectTypes::GOAL);
-	PutObject(17, 15, EObjectTypes::GOAL);
-
-	PutObject(2, 16, EObjectTypes::BOX);
-	PutObject(5, 16, EObjectTypes::BOX);
-	PutObject(5, 13, EObjectTypes::BOX);
-	PutObject(7, 13, EObjectTypes::BOX);
-	PutObject(7, 12, EObjectTypes::BOX);
-	PutObject(5, 11, EObjectTypes::BOX);
-}
-
-void FieldMap::SetFieldMapLevel5()
-{
-	assert(FieldMap::MAP_WIDTH == 20);
-	assert(FieldMap::MAP_HEIGHT == 20);
-
-	PutObject(11, 17, EObjectTypes::PLAYER);
-	ResetFieldMapWithWalls();
-
-	PutObject(5, 18, EObjectTypes::WAY);
-	PutObject(6, 18, EObjectTypes::WAY);
-	PutObject(7, 18, EObjectTypes::WAY);
-	PutObject(8, 18, EObjectTypes::WAY);
-	PutObject(9, 18, EObjectTypes::WAY);
-	PutObject(5, 17, EObjectTypes::WAY);
-	PutObject(9, 17, EObjectTypes::WAY);
-	PutObject(14, 17, EObjectTypes::WAY);
-	PutObject(15, 17, EObjectTypes::WAY);
-	PutObject(16, 17, EObjectTypes::WAY);
-	PutObject(17, 17, EObjectTypes::WAY);
-	PutObject(1, 16, EObjectTypes::WAY);
-	PutObject(2, 16, EObjectTypes::WAY);
-	PutObject(3, 16, EObjectTypes::WAY);
-	PutObject(4, 16, EObjectTypes::WAY);
-	PutObject(5, 16, EObjectTypes::WAY);
-	PutObject(6, 16, EObjectTypes::WAY);
-	PutObject(7, 16, EObjectTypes::WAY);
-	PutObject(8, 16, EObjectTypes::WAY);
-	PutObject(9, 16, EObjectTypes::WAY);
-	PutObject(10, 16, EObjectTypes::WAY);
-	PutObject(11, 16, EObjectTypes::WAY);
-	PutObject(12, 16, EObjectTypes::WAY);
-	PutObject(13, 16, EObjectTypes::WAY);
-	PutObject(14, 16, EObjectTypes::WAY);
-	PutObject(15, 16, EObjectTypes::WAY);
-	PutObject(16, 16, EObjectTypes::WAY);
-	PutObject(17, 16, EObjectTypes::WAY);
-	PutObject(1, 15, EObjectTypes::WAY);
-	PutObject(2, 15, EObjectTypes::WAY);
-	PutObject(3, 15, EObjectTypes::WAY);
-	PutObject(5, 15, EObjectTypes::WAY);
-	PutObject(8, 15, EObjectTypes::WAY);
-	PutObject(14, 15, EObjectTypes::WAY);
-	PutObject(15, 15, EObjectTypes::WAY);
-	PutObject(16, 15, EObjectTypes::WAY);
-	PutObject(17, 15, EObjectTypes::WAY);
-	PutObject(3, 14, EObjectTypes::WAY);
-	PutObject(5, 14, EObjectTypes::WAY);
-	PutObject(8, 14, EObjectTypes::WAY);
-	PutObject(3, 13, EObjectTypes::WAY);
-	PutObject(4, 13, EObjectTypes::WAY);
-	PutObject(5, 13, EObjectTypes::WAY);
-	PutObject(6, 13, EObjectTypes::WAY);
-	PutObject(7, 13, EObjectTypes::WAY);
-	PutObject(8, 13, EObjectTypes::WAY);
-	PutObject(5, 12, EObjectTypes::WAY);
-	PutObject(6, 12, EObjectTypes::WAY);
-	PutObject(7, 12, EObjectTypes::WAY);
-	PutObject(5, 11, EObjectTypes::WAY);
-	PutObject(6, 11, EObjectTypes::WAY);
-	PutObject(7, 11, EObjectTypes::WAY);
-	PutObject(5, 10, EObjectTypes::WAY);
-	PutObject(6, 10, EObjectTypes::WAY);
-	PutObject(7, 10, EObjectTypes::WAY);
-
-	PutObject(16, 17, EObjectTypes::GOAL);
-	PutObject(17, 17, EObjectTypes::GOAL);
-	PutObject(16, 16, EObjectTypes::GOAL);
-	PutObject(17, 16, EObjectTypes::GOAL);
-	PutObject(16, 15, EObjectTypes::GOAL);
-	PutObject(17, 15, EObjectTypes::GOAL);
-
-	PutObject(2, 16, EObjectTypes::BOX);
-	PutObject(5, 16, EObjectTypes::BOX);
-	PutObject(5, 13, EObjectTypes::BOX);
-	PutObject(7, 13, EObjectTypes::BOX);
-	PutObject(7, 12, EObjectTypes::BOX);
-	PutObject(5, 11, EObjectTypes::BOX);
-}
-
-void FieldMap::SetFieldMapLevel6()
+void FieldMap::setFieldMapLevel6()
 {
 	assert(FieldMap::MAP_WIDTH == 20);
 	assert(FieldMap::MAP_HEIGHT == 20);

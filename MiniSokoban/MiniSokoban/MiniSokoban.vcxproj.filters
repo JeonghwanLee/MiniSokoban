@@ -27,9 +27,6 @@
     <ClInclude Include="EModeTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StartMode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameMode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,15 +45,18 @@
     <ClInclude Include="Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EObjectColors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sokoban.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StartMode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PlayMode.cpp">
@@ -75,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EditorMode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

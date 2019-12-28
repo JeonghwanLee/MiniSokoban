@@ -27,14 +27,14 @@ void Sokoban::PlayGame()
 
 		switch (mModeType.GetGameMode())
 		{
-		case EModeTypes::START_MODE:
-			mGameMode = new StartMode();
+		case EModeTypes::MAIN_MODE:
+			mGameMode = new MainMode();
 			break;
 		case EModeTypes::EDITOR_MODE:
 			mGameMode = new EditorMode();
 			break;
 		case EModeTypes::PLAY_MODE:
-			mGameMode = new PlayMode(mLevel);
+			mGameMode = new PlayMode(&mLevel);
 			break;
 		case EModeTypes::EXIT_MODE:
 			std::cout << "Terminating Game..." << std::endl;
@@ -44,11 +44,11 @@ void Sokoban::PlayGame()
 			break;
 		}
 
-		PerformMode();
+		performMode();
 	}
 }
 
-void Sokoban::PerformMode() 
+void Sokoban::performMode() 
 {
 	system("CLS");
 	mGameMode->SetFieldMaps(mFieldMaps);

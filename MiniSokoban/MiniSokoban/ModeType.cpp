@@ -1,7 +1,7 @@
 #include "ModeType.h"
 
 ModeType::ModeType()
-	: mMode(EModeTypes::START_MODE)
+	: mMode(EModeTypes::MAIN_MODE)
 {
 }
 
@@ -9,9 +9,9 @@ ModeType::~ModeType()
 {
 }
 
-void ModeType::SetStartMode()
+void ModeType::SetMainMode()
 {
-	mMode = EModeTypes::START_MODE;
+	mMode = EModeTypes::MAIN_MODE;
 }
 
 void ModeType::SetEditorMode()
@@ -29,7 +29,7 @@ void ModeType::SetExitMode()
 	mMode = EModeTypes::EXIT_MODE;
 }
 
-EModeTypes ModeType::GetGameMode()
+EModeTypes ModeType::GetGameMode() const
 {
 	return mMode;
 }

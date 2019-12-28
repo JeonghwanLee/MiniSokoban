@@ -1,5 +1,5 @@
 #include "GameMode.h"
-#include "Sokoban.h"
+#include "Object.h"
 
 GameMode::GameMode()
 	: mHConsole(GetStdHandle(STD_OUTPUT_HANDLE))
@@ -40,142 +40,132 @@ void GameMode::WaitForKeyInput()
 	{
 		if (IsKeyPressed(VK_LEFT))
 		{
-			if (ActionLeft())
-			{
-				return;
-			}
+			ActionLeft();
+			return;
 		}
 		else if (IsKeyPressed(VK_UP))
 		{
-			if (ActionUp())
-			{
-				return;
-			}
+			ActionUp();
+			return;
 		}
 		else if (IsKeyPressed(VK_DOWN))
 		{
-			if (ActionDown())
-			{
-				return;
-			}
+			ActionDown();
+			return;
 		}
 		else if (IsKeyPressed(VK_RIGHT))
 		{
-			if (ActionRight())
-			{
-				return;
-			}
+			ActionRight();
+			return;
 		}
 		else if (IsKeyPressed(VK_RETURN))
 		{
-			if (ActionEnter())
-			{
-				return;
-			}
+			ActionEnter();
+			return;
 		}
 		else if (IsKeyPressed(VK_ESCAPE))
 		{
-			if (ActionEscape())
-			{ 
-				system("CLS");
-				return;
-			}
+			ActionEscape();
+			system("CLS");
+			return;
 		}
 		else if (IsKeyPressed(VK_SPACE))
 		{
-			if (ActionSpace())
-			{
-				return;
-			}
+			ActionSpace();
+			return;
 		}
 		else if (IsKeyPressed(0x31)) // number 1 pressed
 		{
-			if (ActionNum(1))
-			{
-				return;
-			}
+			ActionNum(1);
+			return;
 		}
 		else if (IsKeyPressed(0x32)) // number 2 pressed
 		{
-			if (ActionNum(2))
-			{
-				return;
-			}
+			ActionNum(2);
+			return;
 		}
 		else if (IsKeyPressed(0x33)) // number 3 pressed
 		{
-			if (ActionNum(3))
-			{
-				return;
-			}
+			ActionNum(3);
+			return;
 		}
 		else if (IsKeyPressed(0x34)) // number 4 pressed
 		{
-			if (ActionNum(4))
-			{
-				return;
-			}
+			ActionNum(4);
+			return;
 		}
 		else if (IsKeyPressed(0x35)) // number 5 pressed
 		{
-			if (ActionNum(5))
-			{
-				return;
-			}
+			ActionNum(5);
+			return;
 		}
 		else if (IsKeyPressed(0x36)) // number 6 pressed
 		{
-			if (ActionNum(6))
-			{
-				return;
-			}
+			ActionNum(6);
+			return;
 		}
 		else if (IsKeyPressed(0x50)) // number 'p' pressed
 		{
-			if (ActionPlayer())
-			{
-				return;
-			}
+			ActionPlayer();
+			return;
 		}
 		else if (IsKeyPressed(0x42)) // number 'b' pressed
 		{
-			if (ActionBox())
-			{
-				return;
-			}
+			ActionBox();
+			return;
 		}
 		else if (IsKeyPressed(0x57)) // number 'w' pressed
 		{
-			if (ActionWall())
-			{
-				return;
-			}
+			ActionWall();
+			return;
 		}
 		else if (IsKeyPressed(0x47)) // number 'g' pressed
 		{
-			if (ActionGoal())
-			{
-				return;
-			}
+			ActionGoal();
+			return;
 		}
 		else if (IsKeyPressed(0x59)) // number 'y' pressed
 		{
-		if (ActionWay())
-		{
+			ActionWay();
 			return;
 		}
-		}
-		Sleep(100);
 	}
 }
 
-void GameMode::Clear()
+void GameMode::SetCursorOrigin()
 {
 	COORD origin = { 0, 0 };
 	SetConsoleCursorPosition(mHConsole, origin);
 }
 
-bool GameMode::IsKeyPressed(int key)
+bool GameMode::IsKeyPressed(int key) const
 {
 	return (GetAsyncKeyState(key) & (0x8000 != 0));
+}
+
+void GameMode::drawObjectDescription() const
+{
+	printObjectByColor(EObjectColors::CYANBLUE_WHITE, false);
+	printObjectDescriptionByObjectType(EObjectTypes::PLAYER);
+	printObjectByColor(EObjectColors::RED_WHITE, false);
+	printObjectDescriptionByObjectType(EObjectTypes::BOX);
+	printObjectByColor(EObjectColors::WHITE_BLACK, false);
+	printObjectDescriptionByObjectType(EObjectTypes::WALL);
+	printObjectByColor(EObjectColors::YELLOW_WHITE, false);
+	printObjectDescriptionByObjectType(EObjectTypes::GOAL);
+	printObjectByColor(EObjectColors::BLACK_WHITE, false);
+	printObjectDescriptionByObjectType(EObjectTypes::WAY);
+	std::cout << std::endl;
+	std::cout << std::endl;
+}
+
+void GameMode::printObjectByColor(EObjectColors objectColor, bool isCursorOn) const
+{
+	SetConsoleTextAttribute(mHConsole, static_cast<WORD>(objectColor));
+	if (isCursorOn)
+	{
+		std::cout << "[]";
+		return;
+	}
+	std::cout << "  ";
 }

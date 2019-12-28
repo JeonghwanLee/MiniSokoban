@@ -1,33 +1,172 @@
 #include "PlayMode.h"
 #include "Object.h"
 
-PlayMode::PlayMode(size_t& currentLevel)
-	: mLevel(currentLevel)
-	, bStageClearFlag(false)
-{
+PlayMode::PlayMode(size_t* currentLevelPtr)
+	: mLevelPtr(currentLevelPtr)
+	, mbStageClearFlag(false)
+{	
 }
 
 PlayMode::~PlayMode()
 {
 }
 
-void PlayMode::CheckStageClear()
+void PlayMode::Initialize()
 {
-	assert(FieldMap::MAP_WIDTH == 20);
-	assert(FieldMap::MAP_HEIGHT == 20);
+	mbStageClearFlag = false;
+	mFieldMap = new FieldMap(mFieldMaps[*mLevelPtr - 1]);
+}
 
+void PlayMode::Draw()
+{
+	SetCursorOrigin();
+	checkStageClear();
+	if (mbStageClearFlag)
+	{
+		(*mLevelPtr)++;
+		if (*mLevelPtr > 6)
+		{
+			drawGameClear();
+			return;
+		}
+		delete mFieldMap;
+		mFieldMap = new FieldMap(mFieldMaps[*mLevelPtr - 1]);
+		mbStageClearFlag = false;
+	}
+	drawFieldMap();
+	drawObjectDescription();
+	SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_WHITE));
+	std::cout << "   Level " << *mLevelPtr << std::endl;
+	std::cout << std::endl;
+	SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_WHITE));
+	std::cout << "   ESC: Back to Main" << std::endl;
+}
+
+void PlayMode::ActionLeft()
+{
+	mFieldMap->MovePlayerLeft();
+}
+
+void PlayMode::ActionUp()
+{
+	mFieldMap->MovePlayerUp();
+}
+
+void PlayMode::ActionDown()
+{
+	mFieldMap->MovePlayerDown();
+}
+
+void PlayMode::ActionRight()
+{
+	mFieldMap->MovePlayerRight();
+}
+
+void PlayMode::ActionEnter()
+{
+}
+
+void PlayMode::ActionEscape()
+{
+	mModeType->SetMainMode();
+}
+
+void PlayMode::ActionSpace()
+{
+}
+
+void PlayMode::ActionNum(int level)
+{
+}
+
+void PlayMode::ActionPlayer()
+{
+}
+
+void PlayMode::ActionBox()
+{
+}
+
+void PlayMode::ActionWall()
+{
+}
+
+void PlayMode::ActionGoal()
+{
+}
+
+void PlayMode::ActionWay()
+{
+}
+
+void PlayMode::drawFieldMap() const
+{
+	Object* object;
 	for (unsigned int i = 0; i < FieldMap::MAP_HEIGHT; i++)
 	{
 		for (unsigned int j = 0; j < FieldMap::MAP_WIDTH; j++)
 		{
-			Object* object = mFieldMap->GetObject(j, i);
+			object = mFieldMap->GetObjectFromMap(j, i);
+			if (object == nullptr)
+			{
+				printObjectByColor(EObjectColors::BLACK_WHITE, false);
+			}
+			else if (object->GetObjectType() == EObjectTypes::GOAL && object->IsThereObjectOnGoal())
+			{
+				printObjectByColor(object->GetObjectOnGoal()->GetObjectColor(), false);
+			}
+			else
+			{
+				printObjectByColor(object->GetObjectColor(), false);
+			}
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+void PlayMode::printObjectDescriptionByObjectType(EObjectTypes objectType) const
+{
+	SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_WHITE));
+	if (objectType == EObjectTypes::PLAYER)
+	{
+		std::cout << " Player  ";
+	}
+	else if (objectType == EObjectTypes::BOX)
+	{
+		std::cout << " Box  ";
+	}
+	else if (objectType == EObjectTypes::GOAL)
+	{
+		std::cout << " Goal  ";
+	}
+	else if (objectType == EObjectTypes::WALL)
+	{
+		std::cout << " Wall  ";
+	}
+	else
+	{
+		std::cout << " Way ";
+	}
+}
+
+void PlayMode::checkStageClear()
+{
+	assert(FieldMap::MAP_WIDTH == 20);
+	assert(FieldMap::MAP_HEIGHT == 20);
+	Object* object;
+	for (unsigned int i = 0; i < FieldMap::MAP_HEIGHT; i++)
+	{
+		for (unsigned int j = 0; j < FieldMap::MAP_WIDTH; j++)
+		{
+			object = mFieldMap->GetObjectFromMap(j, i);
 			if (object == nullptr)
 			{
 				continue;
 			}
 			else if (object->GetObjectType() == EObjectTypes::GOAL)
 			{
-				if (!object->hasObjectOnGoal())
+				if (!object->IsThereObjectOnGoal())
 				{
 					return;
 				}
@@ -38,204 +177,17 @@ void PlayMode::CheckStageClear()
 			}
 		}
 	}
-
-	bStageClearFlag = true;
+	mbStageClearFlag = true;
 }
 
-void PlayMode::Draw()
+void PlayMode::drawGameClear()
 {
-	Clear();
-	DrawFieldMap();
+	system("CLS");
+	SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_WHITE));
+	std::cout << "*********************************************" << std::endl;
 	std::cout << std::endl;
-	DrawObjectDescription();
-	SetConsoleTextAttribute(mHConsole, BLACK_GREEN);
+	std::cout << "  You Win! Press ESC to back to Main.  " << std::endl;
 	std::cout << std::endl;
-	std::cout << "ESC: Back to Start Menu" << std::endl;
-	if (bStageClearFlag)
-	{
-		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
-		std::cout << std::endl;
-		std::cout << "*********************************************" << std::endl;
-		std::cout << "  You Win! Press ESC to back to Start Menu.  " << std::endl;
-		std::cout << "*********************************************" << std::endl;
-	}
-}
-
-bool PlayMode::ActionLeft()
-{
-	if (bStageClearFlag)
-	{
-		return false;
-	}
-	mFieldMap->MovePlayerLeft();
-	CheckStageClear();
-	Draw();
-	return false;
-}
-
-bool PlayMode::ActionUp()
-{
-	if (bStageClearFlag)
-	{
-		return false;
-	}
-	mFieldMap->MovePlayerUp();
-	CheckStageClear();
-	Draw();
-	return false;
-}
-
-bool PlayMode::ActionDown()
-{
-	if (bStageClearFlag)
-	{
-		return false;
-	}
-	mFieldMap->MovePlayerDown();
-	CheckStageClear();
-	Draw();
-	return false;
-}
-
-bool PlayMode::ActionRight()
-{
-	if (bStageClearFlag)
-	{
-		return false;
-	}
-	mFieldMap->MovePlayerRight();
-	CheckStageClear();
-	Draw();
-	return false;
-}
-
-bool PlayMode::ActionEnter()
-{
-	return false;
-}
-
-bool PlayMode::ActionEscape()
-{
-	mModeType->SetStartMode();
-	return true;
-}
-
-bool PlayMode::ActionSpace()
-{
-	return false;
-}
-
-bool PlayMode::ActionNum(int level)
-{
-	return false;
-}
-
-bool PlayMode::ActionPlayer()
-{
-	return false;
-}
-
-bool PlayMode::ActionBox()
-{
-	return false;
-}
-
-bool PlayMode::ActionWall()
-{
-	return false;
-}
-
-bool PlayMode::ActionGoal()
-{
-	return false;
-}
-
-bool PlayMode::ActionWay()
-{
-	return false;
-}
-
-void PlayMode::DrawObjectDescription()
-{
-	SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
-	std::cout << "  ";
-	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	std::cout << " Player  ";
-
-	SetConsoleTextAttribute(mHConsole, RED_WHITE);
-	std::cout << "  ";
-	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	std::cout << " Box  ";
-
-	SetConsoleTextAttribute(mHConsole, WHITE_BLACK);
-	std::cout << "  ";
-	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	std::cout << " Wall  ";
-
-	SetConsoleTextAttribute(mHConsole, YELLOW_WHITE);
-	std::cout << "  ";
-	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	std::cout << " Goal  ";
-
-	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	std::cout << "  ";
-	SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	std::cout << " Way ";
-
-	std::cout << std::endl;
-}
-
-void PlayMode::DrawFieldMap()
-{
-	Object* object;
-	for (unsigned int i = 0; i < FieldMap::MAP_HEIGHT; i++)
-	{
-		for (unsigned int j = 0; j < FieldMap::MAP_WIDTH; j++)
-		{
-			object = mFieldMap->GetObject(j, i);
-
-			if (object == nullptr)
-			{
-				SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-			}
-			else if (object->GetObjectType() == EObjectTypes::PLAYER)
-			{
-				SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
-			}
-			else if (object->GetObjectType() == EObjectTypes::BOX)
-			{
-				SetConsoleTextAttribute(mHConsole, RED_WHITE);
-			}
-			else if (object->GetObjectType() == EObjectTypes::WALL)
-			{
-				SetConsoleTextAttribute(mHConsole, WHITE_BLACK);
-			}
-			else if (object->GetObjectType() == EObjectTypes::GOAL)
-			{
-				if (object->hasObjectOnGoal())
-				{
-					if (object->GetObjectOnGoal()->GetObjectType() == EObjectTypes::PLAYER)
-					{
-						SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
-					}
-					else if (object->GetObjectOnGoal()->GetObjectType() == EObjectTypes::BOX)
-					{
-						SetConsoleTextAttribute(mHConsole, RED_WHITE);
-					}
-				}
-				else
-				{
-					SetConsoleTextAttribute(mHConsole, YELLOW_WHITE);
-				}
-			}
-			std::cout << "  ";
-		}
-		std::cout << std::endl;
-	}
-}
-
-void PlayMode::Initialize()
-{
-	bStageClearFlag = false;
-	mFieldMap = new FieldMap(mFieldMaps[mLevel - 1]);
+	std::cout << "*********************************************" << std::endl;
+	*mLevelPtr = 1;
 }

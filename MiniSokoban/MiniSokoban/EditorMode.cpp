@@ -14,265 +14,188 @@ EditorMode::~EditorMode()
 
 void EditorMode::Draw()
 {
-	Clear();
+	SetCursorOrigin();
 	if (mFieldMap == nullptr)
 	{
-		DrawSelectLevel();
+		drawSelectLevel();
 	}
 	else 
 	{
-		DrawSelectedLevelMap();
+		drawSelectedLevelMap();
 	}
 }
 
-bool EditorMode::ActionLeft()
+void EditorMode::ActionLeft()
 {
 	if (mCursorX > 0)
 	{
 		mCursorX--;
 	}
-	Draw();
-	return false;
 }
 
-bool EditorMode::ActionUp()
+void EditorMode::ActionUp()
 {
 	if (mCursorY > 0)
 	{
 		mCursorY--;
 	}
-	Draw();
-	return false;
 }
 
-bool EditorMode::ActionDown()
+void EditorMode::ActionDown()
 {
 	if (mCursorY < FieldMap::MAP_HEIGHT - 1)
 	{
 		mCursorY++;
 	}
-	Draw();
-	return false;
 }
 
-bool EditorMode::ActionRight()
+void EditorMode::ActionRight()
 {
 	if (mCursorX < FieldMap::MAP_WIDTH - 1)
 	{
 		mCursorX++;
 	}
-	Draw();
-	return false;
 }
 
-bool EditorMode::ActionEnter()
+void EditorMode::ActionEnter()
 {
 	mFieldMap->PutObject(mCursorX, mCursorY, mPutObjectType);
-	Draw();
-	return true;
 }
 
-bool EditorMode::ActionEscape()
+void EditorMode::ActionEscape()
 {
-	mModeType->SetStartMode();
-	return true;
+	mModeType->SetMainMode();
 }
 
-bool EditorMode::ActionSpace()
+void EditorMode::ActionSpace()
 {
-	ResetFieldMap();
-	Draw();
-	return false;
+	mFieldMap->ResetFieldMapWithWalls();
 }
 
-bool EditorMode::ActionNum(int level)
+void EditorMode::ActionNum(int level)
 {
 	mFieldMap = &mFieldMaps[level - 1];
 	system("CLS");
-	Draw();
-	return false;
 }
 
-bool EditorMode::ActionPlayer()
+void EditorMode::ActionPlayer()
 {
 	mPutObjectType = EObjectTypes::PLAYER;
-	Draw();
-	return false;
 }
 
-bool EditorMode::ActionBox()
+void EditorMode::ActionBox()
 {
 	mPutObjectType = EObjectTypes::BOX;
-	Draw();
-	return false;
 }
 
-bool EditorMode::ActionWall()
+void EditorMode::ActionWall()
 {
 	mPutObjectType = EObjectTypes::WALL;
-	Draw();
-	return false;
 }
 
-bool EditorMode::ActionGoal()
+void EditorMode::ActionGoal()
 {
 	mPutObjectType = EObjectTypes::GOAL;
-	Draw();
-	return false;
 }
 
-bool EditorMode::ActionWay()
+void EditorMode::ActionWay()
 {
 	mPutObjectType = EObjectTypes::WAY;
-	Draw();
-	return false;
 }
 
 void EditorMode::Initialize()
 {
 }
 
-void EditorMode::ResetFieldMap()
+void EditorMode::drawSelectLevel() const
 {
-	mFieldMap->ResetFieldMapWithWalls();
+	SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_WHITE));
+	std::cout << "*********************** Editor Mode *************************" << std::endl;
+	std::cout << std::endl;
+	std::cout << " Select level of field map you want to edit between 1 and 6. " << std::endl;
+	std::cout << std::endl;
+	std::cout << "            1      2      3      4      5      6             " << std::endl;
+	std::cout << std::endl;
+	std::cout << "*************************************************************" << std::endl;
+	std::cout << std::endl;
+	std::cout << "   ESC: Back to Main" << std::endl;
 }
 
-void EditorMode::DrawSelectLevel()
+void EditorMode::drawSelectedLevelMap() const
 {
-	SetConsoleTextAttribute(mHConsole, BLACK_GREEN);
-	std::cout << "Select level of field map you want to edit between 1 and 6." << std::endl;
+	drawFieldMap();
+	drawObjectDescription();
+	SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_WHITE));
+	std::cout << "   Press one of the above keys to select object type to set." << std::endl;
+	std::cout << std::endl;
+	SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_WHITE));
+	std::cout << "   ENTER: Set Selected Object on []  SPACE: Reset Field   ESC: Back to Main" << std::endl;
 }
 
-void EditorMode::DrawSelectedLevelMap()
-{
-	DrawFieldMap();
-	std::cout << std::endl;
-	DrawObjectDescription();
-	SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
-	std::cout << std::endl;
-	std::cout << "Press one of the above keys to select object type to set." << std::endl;
-	std::cout << std::endl;
-	SetConsoleTextAttribute(mHConsole, BLACK_GREEN);
-	std::cout << "ENTER: Set Selected Object    SPACE: Reset Field    ESC: Back to Start Menu" << std::endl;
-}
-
-void EditorMode::DrawObjectDescription()
-{
-	SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
-	std::cout << "  ";
-	if (mPutObjectType == EObjectTypes::PLAYER)
-	{
-		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
-	}
-	else
-	{
-		SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	}
-	std::cout << " Player: p  ";
-
-	SetConsoleTextAttribute(mHConsole, RED_WHITE);
-	std::cout << "  ";
-	if (mPutObjectType == EObjectTypes::BOX)
-	{
-		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
-	}
-	else
-	{
-		SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	}
-	std::cout << " Box: b  ";
-
-	SetConsoleTextAttribute(mHConsole, WHITE_BLACK);
-	std::cout << "  ";
-	if (mPutObjectType == EObjectTypes::WALL)
-	{
-		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
-	}
-	else
-	{
-		SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	}
-	std::cout << " Wall: w  ";
-
-	SetConsoleTextAttribute(mHConsole, YELLOW_WHITE);
-	std::cout << "  ";
-	if (mPutObjectType == EObjectTypes::GOAL)
-	{
-		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
-	}
-	else
-	{
-		SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	}
-	std::cout << " Goal: g  ";
-
-	SetConsoleTextAttribute(mHConsole, BLACK_PURPLE);
-	std::cout << "  ";
-	if (mPutObjectType == EObjectTypes::WAY)
-	{
-		SetConsoleTextAttribute(mHConsole, BLACK_YELLOW);
-	}
-	else
-	{
-		SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
-	}
-	std::cout << " Way: y  ";
-
-	std::cout << std::endl;
-}
-
-void EditorMode::DrawFieldMap()
+void EditorMode::drawFieldMap() const
 {
 	Object* object;
+	bool isCursorOn = false;
 	for (unsigned int i = 0; i < FieldMap::MAP_HEIGHT; i++)
 	{
 		for (unsigned int j = 0; j < FieldMap::MAP_WIDTH; j++)
 		{
-			object = mFieldMap->GetObject(j, i);
+			if (mCursorX == j && mCursorY == i)
+			{
+				isCursorOn = true;
+			}
+
+			object = mFieldMap->GetObjectFromMap(j, i);
 
 			if (object == nullptr)
 			{
-				SetConsoleTextAttribute(mHConsole, BLACK_WHITE);
+				printObjectByColor(EObjectColors::BLACK_WHITE, isCursorOn);
 			}
-			else if (object->GetObjectType() == EObjectTypes::PLAYER)
+			else if (object->GetObjectType() == EObjectTypes::GOAL && object->IsThereObjectOnGoal())
 			{
-				SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
-			}
-			else if (object->GetObjectType() == EObjectTypes::BOX)
-			{
-				SetConsoleTextAttribute(mHConsole, RED_WHITE);
-			}
-			else if (object->GetObjectType() == EObjectTypes::WALL)
-			{
-				SetConsoleTextAttribute(mHConsole, WHITE_BLACK);
-			}
-			else if (object->GetObjectType() == EObjectTypes::GOAL)
-			{
-				if (object->hasObjectOnGoal())
-				{
-					if (object->GetObjectOnGoal()->GetObjectType() == EObjectTypes::PLAYER)
-					{
-						SetConsoleTextAttribute(mHConsole, GREEN_WHITE);
-					}
-					else if (object->GetObjectOnGoal()->GetObjectType() == EObjectTypes::BOX)
-					{
-						SetConsoleTextAttribute(mHConsole, RED_WHITE);
-					}
-				}
-				else
-				{
-					SetConsoleTextAttribute(mHConsole, YELLOW_WHITE);
-				}
-			}
-			if (mCursorX == j && mCursorY == i)
-			{
-				std::cout << "[]";
+				printObjectByColor(object->GetObjectOnGoal()->GetObjectColor(), isCursorOn);
 			}
 			else
 			{
-				std::cout << "  ";
+				printObjectByColor(object->GetObjectColor(), isCursorOn);
 			}
+
+			isCursorOn = false;
 		}
 		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+void EditorMode::printObjectDescriptionByObjectType(EObjectTypes objectType) const
+{
+	if (mPutObjectType == objectType)
+	{
+		SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_YELLOW));
+	}
+	else
+	{
+		SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_WHITE));
+	}
+
+	if (objectType == EObjectTypes::PLAYER)
+	{
+		std::cout << " Player: p  ";
+	}
+	else if (objectType == EObjectTypes::BOX)
+	{
+		std::cout << " Box: b  ";
+	}
+	else if (objectType == EObjectTypes::GOAL)
+	{
+		std::cout << " Goal: g  ";
+	}
+	else if (objectType == EObjectTypes::WALL)
+	{
+		std::cout << " Wall: w  ";
+	}
+	else
+	{
+		std::cout << " Way: y  ";
 	}
 }

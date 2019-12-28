@@ -1,4 +1,6 @@
 #pragma once
+
+#include "Common.h"
 #include "EObjectTypes.h"
 
 class Object
@@ -8,15 +10,19 @@ public:
 	Object(EObjectTypes objectType);
 	~Object();
 
-	bool hasObjectOnGoal();
+	bool IsThereObjectOnGoal() const;
+
+	EObjectTypes GetObjectType() const;
+	EObjectColors GetObjectColor() const;
+	Object* GetObjectOnGoal() const;
 
 	void SetObjectType(EObjectTypes objectType);
-	EObjectTypes GetObjectType();
-
 	void SetObjectOnGoal(Object* nextObject);
-	Object* GetObjectOnGoal();
 
 private:
+	void setObjectColorByObjectType();
+
 	EObjectTypes mObjectType;
+	EObjectColors mObjectColor;
 	Object* mObjectOnGoal;
 };

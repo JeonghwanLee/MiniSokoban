@@ -1,4 +1,5 @@
 #pragma once
+
 #include "EModeTypes.h"
 
 class ModeType
@@ -7,12 +8,12 @@ public:
 	ModeType();
 	~ModeType();
 
-	void SetStartMode();
+	void SetMainMode();
 	void SetEditorMode();
 	void SetPlayMode();
 	void SetExitMode();
 
-	EModeTypes GetGameMode();
+	EModeTypes GetGameMode() const;
 
 private:
 	EModeTypes mMode;
