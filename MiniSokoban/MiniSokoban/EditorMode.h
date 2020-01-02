@@ -2,11 +2,12 @@
 
 #include "GameMode.h"
 
-class EditorMode : public GameMode
+class EditorMode final : public GameMode
 {
 public:
 	EditorMode();
-	virtual ~EditorMode();
+	EditorMode(const EditorMode& other) = delete;
+	~EditorMode() = default;
 
 	virtual void Draw() override;
 	virtual void ActionLeft() override;

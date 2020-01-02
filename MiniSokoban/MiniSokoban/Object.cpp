@@ -10,15 +10,15 @@ Object::Object(EObjectTypes objectType)
 
 Object::~Object()
 {
+	if (mObjectOnGoal != nullptr)
+	{
+		delete mObjectOnGoal;
+	}
 }
 
 bool Object::IsThereObjectOnGoal() const
 {
-	if (mObjectOnGoal != nullptr)
-	{
-		return true;
-	}
-	return false;
+	return mObjectOnGoal != nullptr;
 }
 
 EObjectTypes Object::GetObjectType() const

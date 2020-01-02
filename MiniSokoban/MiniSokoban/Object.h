@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Common.h"
-#include "EObjectTypes.h"
 
-class Object
+class Object final
 {
 public:
 	Object() = delete;

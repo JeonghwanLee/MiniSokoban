@@ -2,7 +2,7 @@
 
 enum class EObjectColors
 {
-	// BackgroundColor_FontColor = value;
+	// BackgroundColor_FontColor
 	BLACK_YELLOW = 14,
 	BLACK_WHITE = 15, // WAY
 	CYANBLUE_WHITE = 50, // PLAYER

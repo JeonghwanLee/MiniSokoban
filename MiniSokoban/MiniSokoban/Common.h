@@ -1,9 +1,9 @@
 #pragma once
 
+#include <cassert>
+#include <memory>
 #include <iostream>
 #include <windows.h>   // WinAPI
-#include <memory>
-#include <cassert>
 
 #include "EObjectTypes.h"
 #include "EModeTypes.h"

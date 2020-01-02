@@ -5,8 +5,9 @@
 class MainMode : public GameMode
 {
 public:
-	MainMode();
-	~MainMode();
+	MainMode() = default;
+	MainMode(const MainMode& other) = delete;
+	~MainMode() = default;
 
 	virtual void Draw() override;
 
@@ -30,4 +31,3 @@ private:
 	virtual void drawFieldMap() const override;
 	virtual void printObjectDescriptionByObjectType(EObjectTypes objectType) const override;
 };
-

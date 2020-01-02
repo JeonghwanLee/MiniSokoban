@@ -5,8 +5,14 @@ ModeType::ModeType()
 {
 }
 
-ModeType::~ModeType()
+void ModeType::SetEditorMode()
 {
+	mMode = EModeTypes::EDITOR_MODE;
+}
+
+void ModeType::SetExitMode()
+{
+	mMode = EModeTypes::EXIT_MODE;
 }
 
 void ModeType::SetMainMode()
@@ -14,19 +20,9 @@ void ModeType::SetMainMode()
 	mMode = EModeTypes::MAIN_MODE;
 }
 
-void ModeType::SetEditorMode()
-{
-	mMode = EModeTypes::EDITOR_MODE;
-}
-
 void ModeType::SetPlayMode()
 {
 	mMode = EModeTypes::PLAY_MODE;
-}
-
-void ModeType::SetExitMode()
-{
-	mMode = EModeTypes::EXIT_MODE;
 }
 
 EModeTypes ModeType::GetGameMode() const

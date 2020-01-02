@@ -2,10 +2,11 @@
 
 #include "GameMode.h"
 
-class PlayMode : public GameMode
+class PlayMode final : public GameMode
 {
 public:
-	PlayMode(size_t* currentLevelPtr);
+	PlayMode();
+	PlayMode(const PlayMode& other) = delete;
 	~PlayMode();
 
 	virtual void Initialize() override;
@@ -34,6 +35,6 @@ private:
 	void drawGameClear();
 
 	FieldMap* mFieldMap;
-	size_t* mLevelPtr;
-	bool mbStageClearFlag;
+	size_t mLevel;
+	bool mbLevelClearFlag;
 };

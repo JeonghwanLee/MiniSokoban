@@ -2,20 +2,20 @@
 
 #include "EModeTypes.h"
 
-class ModeType
+class ModeType final
 {
 public:
 	ModeType();
-	~ModeType();
+	ModeType(const ModeType& other) = delete;
+	~ModeType() = default;
 
-	void SetMainMode();
 	void SetEditorMode();
-	void SetPlayMode();
 	void SetExitMode();
+	void SetMainMode();
+	void SetPlayMode();
 
 	EModeTypes GetGameMode() const;
 
 private:
 	EModeTypes mMode;
 };
-

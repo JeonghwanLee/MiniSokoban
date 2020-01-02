@@ -8,17 +8,15 @@ class GameMode
 {
 public:
 	GameMode();
-	virtual ~GameMode() = default;
-
-	void SetModeType(ModeType* modeType);
-	void SetFieldMaps(FieldMap* fieldMap);
+	GameMode(const GameMode& other) = delete;
+	virtual ~GameMode() = default; 
 
 	void GetIntoMode();
-	void WaitForKeyInput();
-	void SetCursorOrigin();
 	bool IsKeyPressed(int key) const;
-	virtual void Initialize() = 0;
-	virtual void Draw() = 0;
+	void SetCursorOrigin();
+	void SetFieldMaps(FieldMap* fieldMap);
+	void SetModeType(ModeType* modeType);
+	void WaitForKeyInput();
 
 	virtual void ActionLeft() = 0;
 	virtual void ActionUp() = 0;
@@ -28,20 +26,25 @@ public:
 	virtual void ActionEscape() = 0;
 	virtual void ActionSpace() = 0;
 	virtual void ActionNum(int level) = 0;
+
 	virtual void ActionPlayer() = 0;
 	virtual void ActionBox() = 0;
 	virtual void ActionWall() = 0;
 	virtual void ActionGoal() = 0;
 	virtual void ActionWay() = 0;
 
-protected:
-	virtual void drawFieldMap() const = 0;
-	virtual void printObjectDescriptionByObjectType(EObjectTypes objectType) const = 0;
+	virtual void Initialize() = 0;
+	virtual void Draw() = 0;
 
+protected:
 	void drawObjectDescription() const;
 	void printObjectByColor(EObjectColors objectColor, bool isCursorOn) const;
 
+	virtual void drawFieldMap() const = 0;
+	virtual void printObjectDescriptionByObjectType(EObjectTypes objectType) const = 0;
+
+	// lifetime is handled by Sokoban
 	HANDLE mHConsole;
 	ModeType* mModeType;
-	FieldMap* mFieldMaps;
+	FieldMap* mFieldMaps; 
 };

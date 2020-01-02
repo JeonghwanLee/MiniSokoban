@@ -4,28 +4,27 @@
 
 class Object;
 
-class FieldMap
+class FieldMap final
 {
 public:
 	FieldMap();
 	FieldMap(const FieldMap& other);
 	~FieldMap();
 
-	void ResetFieldMapWithWalls();
-	void SetUpFieldMapByLevel(size_t level);
+	Object* GetObjectFromMap(int x, int y) const;
 
-	void PutObject(int x, int y, EObjectTypes objectType);
 	void MovePlayerLeft();
 	void MovePlayerRight();
 	void MovePlayerUp();
 	void MovePlayerDown();
-	
-	Object* GetObjectFromMap(int x, int y) const;
+
+	void PutObject(int x, int y, EObjectTypes objectType);
+	void ResetFieldMapWithWalls();
+	void SetUpFieldMapByLevel(size_t level);
 
 	enum { MAP_WIDTH = 20, MAP_HEIGHT = 20 };
 
 private:
-	// yFrom increases as it goes to downwards
 	bool isPushable(int xFrom, int yFrom, int xTo, int yTo);
 	void moveObjectFromTo(int xFrom, int yFrom, int xTo, int yTo);
 
@@ -40,5 +39,5 @@ private:
 	Object* mPlayer;
 	unsigned int mPlayerX;
 	unsigned int mPlayerY;
-	bool mbMoveNextObject;
+	bool mbIsNextObjectPushable;
 };

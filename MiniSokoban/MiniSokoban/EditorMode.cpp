@@ -9,10 +9,6 @@ EditorMode::EditorMode()
 {
 }
 
-EditorMode::~EditorMode()
-{
-}
-
 void EditorMode::Draw()
 {
 	SetCursorOrigin();

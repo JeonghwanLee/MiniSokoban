@@ -1,13 +1,5 @@
 #include "MainMode.h"
 
-MainMode::MainMode()
-{
-}
-
-MainMode::~MainMode()
-{
-}
-
 void MainMode::Draw()
 {
 	SetCursorOrigin();

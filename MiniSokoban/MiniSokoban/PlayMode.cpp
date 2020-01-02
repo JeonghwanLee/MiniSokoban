@@ -1,10 +1,10 @@
 #include "PlayMode.h"
 #include "Object.h"
 
-PlayMode::PlayMode(size_t* currentLevelPtr)
+PlayMode::PlayMode()
 	: mFieldMap(nullptr)
-	, mLevelPtr(currentLevelPtr)
-	, mbStageClearFlag(false)
+	, mLevel(1)
+	, mbLevelClearFlag(false)
 {	
 }
 
@@ -15,10 +15,10 @@ PlayMode::~PlayMode()
 
 void PlayMode::Initialize()
 {
-	mbStageClearFlag = false;
+	mbLevelClearFlag = false;
 	if (mFieldMap == nullptr)
 	{
-		mFieldMap = new FieldMap(mFieldMaps[*mLevelPtr - 1]);
+		mFieldMap = new FieldMap(mFieldMaps[mLevel - 1]);
 	}
 }
 
@@ -26,22 +26,25 @@ void PlayMode::Draw()
 {
 	SetCursorOrigin();
 	checkStageClear();
-	if (mbStageClearFlag)
+
+	if (mbLevelClearFlag)
 	{
-		(*mLevelPtr)++;
-		if (*mLevelPtr > 6)
+		mLevel++;
+		if (mLevel > 6)
 		{
 			drawGameClear();
 			return;
 		}
+
 		delete mFieldMap;
-		mFieldMap = new FieldMap(mFieldMaps[*mLevelPtr - 1]);
-		mbStageClearFlag = false;
+		mFieldMap = new FieldMap(mFieldMaps[mLevel - 1]);
+		mbLevelClearFlag = false;
 	}
+
 	drawFieldMap();
 	drawObjectDescription();
 	SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_WHITE));
-	std::cout << "   Level " << *mLevelPtr << std::endl;
+	std::cout << "   Level " << mLevel << std::endl;
 	std::cout << std::endl;
 	SetConsoleTextAttribute(mHConsole, static_cast<WORD>(EObjectColors::BLACK_WHITE));
 	std::cout << "   ESC: Back to Main" << std::endl;
@@ -182,7 +185,7 @@ void PlayMode::checkStageClear()
 			}
 		}
 	}
-	mbStageClearFlag = true;
+	mbLevelClearFlag = true;
 }
 
 void PlayMode::drawGameClear()
@@ -194,5 +197,5 @@ void PlayMode::drawGameClear()
 	std::cout << "  You Win! Press ESC to back to Main.  " << std::endl;
 	std::cout << std::endl;
 	std::cout << "*********************************************" << std::endl;
-	*mLevelPtr = 1;
+	mLevel = 1;
 }
