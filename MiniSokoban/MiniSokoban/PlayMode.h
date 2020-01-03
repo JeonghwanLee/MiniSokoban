@@ -5,7 +5,7 @@
 class PlayMode final : public GameMode
 {
 public:
-	PlayMode();
+	PlayMode(const std::shared_ptr<ModeType>& modeType);
 	PlayMode(const PlayMode& other) = delete;
 	~PlayMode();
 

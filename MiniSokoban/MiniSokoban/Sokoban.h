@@ -21,11 +21,11 @@ private:
 	void performMode();
 	void setActiveModeType();
 
-	enum { MAX_LEVEL = 6 };
+	enum { MAP_LEVEL = 6 };
 	enum { MODE_COUNT = 3 };
 
-	ModeType mModeType;
+	std::shared_ptr<ModeType> mModeType;
 	GameMode* mGameModes[MODE_COUNT];
 	GameMode* mActiveMode;
-	FieldMap mFieldMaps[MAX_LEVEL];
+	FieldMap mFieldMaps[MAP_LEVEL];
 };

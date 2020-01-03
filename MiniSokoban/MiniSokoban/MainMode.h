@@ -5,7 +5,7 @@
 class MainMode : public GameMode
 {
 public:
-	MainMode() = default;
+	MainMode(const std::shared_ptr<ModeType>& modeType);
 	MainMode(const MainMode& other) = delete;
 	~MainMode() = default;
 

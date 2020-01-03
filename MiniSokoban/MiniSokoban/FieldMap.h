@@ -36,7 +36,6 @@ private:
 	void setFieldMapLevel6();
 
 	Object* mObjectMap[MAP_WIDTH * MAP_HEIGHT];
-	Object* mPlayer;
 	unsigned int mPlayerX;
 	unsigned int mPlayerY;
 	bool mbIsNextObjectPushable;

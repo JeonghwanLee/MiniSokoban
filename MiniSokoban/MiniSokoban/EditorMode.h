@@ -5,7 +5,7 @@
 class EditorMode final : public GameMode
 {
 public:
-	EditorMode();
+	EditorMode(const std::shared_ptr<ModeType>& modeType);
 	EditorMode(const EditorMode& other) = delete;
 	~EditorMode() = default;
 

@@ -1,11 +1,16 @@
 #include "GameMode.h"
 #include "Object.h"
 
-GameMode::GameMode()
+GameMode::GameMode(const std::shared_ptr<ModeType>& modeType)
 	: mHConsole(GetStdHandle(STD_OUTPUT_HANDLE))
-	, mModeType(nullptr)
+	, mModeType(modeType)
 	, mFieldMaps(nullptr)
 {
+}
+
+GameMode::~GameMode()
+{
+	mModeType = nullptr;
 }
 
 void GameMode::GetIntoMode()
@@ -43,11 +48,6 @@ void GameMode::SetFieldMaps(FieldMap* fieldMaps)
 	{
 		mFieldMaps = fieldMaps;
 	}
-}
-
-void GameMode::SetModeType(ModeType* modeType)
-{
-	mModeType = modeType;
 }
 
 void GameMode::WaitForKeyInput()

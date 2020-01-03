@@ -1,8 +1,9 @@
 #include "PlayMode.h"
 #include "Object.h"
 
-PlayMode::PlayMode()
-	: mFieldMap(nullptr)
+PlayMode::PlayMode(const std::shared_ptr<ModeType>& modeType)
+	: GameMode(modeType)
+	, mFieldMap(nullptr)
 	, mLevel(1)
 	, mbLevelClearFlag(false)
 {	

@@ -1,8 +1,9 @@
 #include "EditorMode.h"
 #include "Object.h"
 
-EditorMode::EditorMode()
-	: mFieldMap(nullptr)
+EditorMode::EditorMode(const std::shared_ptr<ModeType>& modeType)
+	: GameMode(modeType)
+	, mFieldMap(nullptr)
 	, mPutObjectType(EObjectTypes::BOX)
 	, mCursorX(0)
 	, mCursorY(0)

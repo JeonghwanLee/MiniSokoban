@@ -1,14 +1,14 @@
 #include "Sokoban.h"
 
 Sokoban::Sokoban()
-	: mModeType()
-	, mActiveMode(nullptr)
 {
-	mGameModes[0] = new MainMode();
-	mGameModes[1] = new EditorMode();
-	mGameModes[2] = new PlayMode();
+	mModeType = std::make_shared<ModeType>();
 
-	for (size_t level = 1; level <= MAX_LEVEL; level++)
+	mGameModes[0] = new MainMode(mModeType);
+	mGameModes[1] = new EditorMode(mModeType);
+	mGameModes[2] = new PlayMode(mModeType);
+
+	for (size_t level = 1; level <= MAP_LEVEL; level++)
 	{
 		mFieldMaps[level - 1].SetUpFieldMapByLevel(level);
 	}
@@ -43,14 +43,13 @@ void Sokoban::performMode()
 {
 	system("CLS");
 	mActiveMode->SetFieldMaps(mFieldMaps);
-	mActiveMode->SetModeType(&mModeType);
 	mActiveMode->Initialize();
 	mActiveMode->GetIntoMode();
 }
 
 void Sokoban::setActiveModeType()
 {
-	switch (mModeType.GetGameMode())
+	switch (mModeType->GetGameMode())
 	{
 	case EModeTypes::MAIN_MODE:
 		mActiveMode = mGameModes[0];

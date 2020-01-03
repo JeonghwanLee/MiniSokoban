@@ -3,7 +3,6 @@
 
 FieldMap::FieldMap()
 	: mObjectMap{ nullptr }
-	, mPlayer(nullptr)
 	, mPlayerX(1)
 	, mPlayerY(1)
 	, mbIsNextObjectPushable(false)
@@ -20,7 +19,6 @@ FieldMap::FieldMap()
 		else if (x == 1 && y == 1)
 		{
 			mObjectMap[i] = new Object(EObjectTypes::PLAYER);
-			mPlayer = mObjectMap[i];
 		}
 		else
 		{
@@ -31,9 +29,9 @@ FieldMap::FieldMap()
 
 FieldMap::FieldMap(const FieldMap& other)
 	: mObjectMap{ nullptr }
-	, mPlayer(nullptr)
 	, mPlayerX(other.mPlayerX)
 	, mPlayerY(other.mPlayerY)
+	, mbIsNextObjectPushable(false)
 {
 	for (int i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++)
 	{
@@ -49,8 +47,6 @@ FieldMap::FieldMap(const FieldMap& other)
 
 FieldMap::~FieldMap()
 {
-	mPlayer = nullptr;
-
 	for (int i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++)
 	{
 		if (mObjectMap[i] != nullptr)
@@ -137,7 +133,7 @@ void FieldMap::PutObject(int x, int y, EObjectTypes objectType)
 
 	if (objectType == EObjectTypes::PLAYER)
 	{
-		mObjectMap[y * MAP_WIDTH + x] = mPlayer;
+		mObjectMap[y * MAP_WIDTH + x] = mObjectMap[mPlayerY * MAP_WIDTH + mPlayerX];
 		mObjectMap[mPlayerY * MAP_WIDTH + mPlayerX] = nullptr;
 		mPlayerX = x;
 		mPlayerY = y;
@@ -220,25 +216,25 @@ bool FieldMap::isPushable(int xFrom, int yFrom, int xTo, int yTo)
 		return false;
 	}
 
-	Object* next = mObjectMap[yFrom * MAP_WIDTH + xFrom];
-	Object* nextToNext = mObjectMap[yTo * MAP_WIDTH + xTo];
-	EObjectTypes nextObjectType;
+	Object* fromObject = mObjectMap[yFrom * MAP_WIDTH + xFrom];
+	Object* toObject = mObjectMap[yTo * MAP_WIDTH + xTo];
+	EObjectTypes fromObjectType;
 
-	if (next != nullptr && next->GetObjectType() == EObjectTypes::PLAYER)
+	if (fromObject != nullptr && fromObject->GetObjectType() == EObjectTypes::PLAYER)
 	{
 		assert(false);
 	}
 
-	if (next == nullptr)
+	if (fromObject == nullptr)
 	{
 		return true;
 	}
 	else
 	{
-		nextObjectType = next->GetObjectType();
-		if (nextObjectType == EObjectTypes::BOX)
+		fromObjectType = fromObject->GetObjectType();
+		if (fromObjectType == EObjectTypes::BOX)
 		{
-			if (nextToNext == nullptr || (nextToNext->GetObjectType() == EObjectTypes::GOAL && !nextToNext->IsThereObjectOnGoal()))
+			if (toObject == nullptr || (toObject->GetObjectType() == EObjectTypes::GOAL && !toObject->IsThereObjectOnGoal()))
 			{
 				mbIsNextObjectPushable = true;
 				return true;
@@ -248,15 +244,15 @@ bool FieldMap::isPushable(int xFrom, int yFrom, int xTo, int yTo)
 				return false;
 			}
 		}
-		else if (nextObjectType == EObjectTypes::WALL)
+		else if (fromObjectType == EObjectTypes::WALL)
 		{
 			return false;
 		}
-		else if (nextObjectType == EObjectTypes::GOAL)
+		else if (fromObjectType == EObjectTypes::GOAL)
 		{
-			if (next->IsThereObjectOnGoal())
+			if (fromObject->IsThereObjectOnGoal())
 			{
-				if (nextToNext == nullptr || (nextToNext->GetObjectType() == EObjectTypes::GOAL && !nextToNext->IsThereObjectOnGoal()) )
+				if (toObject == nullptr || (toObject->GetObjectType() == EObjectTypes::GOAL && !toObject->IsThereObjectOnGoal()) )
 				{
 					mbIsNextObjectPushable = true;
 					return true;

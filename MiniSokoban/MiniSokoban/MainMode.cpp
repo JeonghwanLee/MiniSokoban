@@ -1,5 +1,10 @@
 #include "MainMode.h"
 
+MainMode::MainMode(const std::shared_ptr<ModeType>& modeType)
+	: GameMode(modeType)
+{
+}
+
 void MainMode::Draw()
 {
 	SetCursorOrigin();

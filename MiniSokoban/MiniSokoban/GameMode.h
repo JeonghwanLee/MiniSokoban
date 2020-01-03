@@ -7,15 +7,14 @@
 class GameMode
 {
 public:
-	GameMode();
+	GameMode(const std::shared_ptr<ModeType>& modeType);
 	GameMode(const GameMode& other) = delete;
-	virtual ~GameMode() = default; 
+	virtual ~GameMode(); 
 
 	void GetIntoMode();
 	bool IsKeyPressed(int key) const;
 	void SetCursorOrigin();
 	void SetFieldMaps(FieldMap* fieldMap);
-	void SetModeType(ModeType* modeType);
 	void WaitForKeyInput();
 
 	virtual void ActionLeft() = 0;
@@ -45,6 +44,6 @@ protected:
 
 	// lifetime is handled by Sokoban
 	HANDLE mHConsole;
-	ModeType* mModeType;
+	std::shared_ptr<ModeType> mModeType;
 	FieldMap* mFieldMaps; 
 };
